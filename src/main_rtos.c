@@ -156,7 +156,7 @@ uint32_t iter = 10;
  */
 uint32_t num_switches = 0;
 
-QueueP_Handle myQ[NUM_TASK];
+// QueueP_Handle myQ[NUM_TASK];
 TaskP_Handle main_task[NUM_TASK];
 
 /* Array to hold all the semaphores */
@@ -224,40 +224,40 @@ uint32_t buf_ocmc[BUF_SIZE] __attribute__((section(".buf_cpy")));
  * are placed in the memory such that all of them occupy the same cache entry
  * in the 4-way cache. The sections are defined in the linker cmd file*/
 
-void SlaveTaskFxn_0(void *a0, void *a1) __attribute__((section(".task_0")));
-void SlaveTaskFxn_1(void *a0, void *a1) __attribute__((section(".task_1")));
-void SlaveTaskFxn_2(void *a0, void *a1) __attribute__((section(".task_2")));
-void SlaveTaskFxn_3(void *a0, void *a1) __attribute__((section(".task_3")));
-void SlaveTaskFxn_4(void *a0, void *a1) __attribute__((section(".task_4")));
-void SlaveTaskFxn_5(void *a0, void *a1) __attribute__((section(".task_5")));
-void SlaveTaskFxn_6(void *a0, void *a1) __attribute__((section(".task_6")));
-void SlaveTaskFxn_7(void *a0, void *a1) __attribute__((section(".task_7")));
-void SlaveTaskFxn_8(void *a0, void *a1) __attribute__((section(".task_8")));
-void SlaveTaskFxn_9(void *a0, void *a1) __attribute__((section(".task_9")));
-void SlaveTaskFxn_10(void *a0, void *a1) __attribute__((section(".task_10")));
-void SlaveTaskFxn_11(void *a0, void *a1) __attribute__((section(".task_11")));
-void SlaveTaskFxn_12(void *a0, void *a1) __attribute__((section(".task_12")));
-void SlaveTaskFxn_13(void *a0, void *a1) __attribute__((section(".task_13")));
-void SlaveTaskFxn_14(void *a0, void *a1) __attribute__((section(".task_14")));
-void SlaveTaskFxn_15(void *a0, void *a1) __attribute__((section(".task_15")));
+// void SlaveTaskFxn_0(void *a0, void *a1) __attribute__((section(".task_0")));
+// void SlaveTaskFxn_1(void *a0, void *a1) __attribute__((section(".task_1")));
+// void SlaveTaskFxn_2(void *a0, void *a1) __attribute__((section(".task_2")));
+// void SlaveTaskFxn_3(void *a0, void *a1) __attribute__((section(".task_3")));
+// void SlaveTaskFxn_4(void *a0, void *a1) __attribute__((section(".task_4")));
+// void SlaveTaskFxn_5(void *a0, void *a1) __attribute__((section(".task_5")));
+// void SlaveTaskFxn_6(void *a0, void *a1) __attribute__((section(".task_6")));
+// void SlaveTaskFxn_7(void *a0, void *a1) __attribute__((section(".task_7")));
+// void SlaveTaskFxn_8(void *a0, void *a1) __attribute__((section(".task_8")));
+// void SlaveTaskFxn_9(void *a0, void *a1) __attribute__((section(".task_9")));
+// void SlaveTaskFxn_10(void *a0, void *a1) __attribute__((section(".task_10")));
+// void SlaveTaskFxn_11(void *a0, void *a1) __attribute__((section(".task_11")));
+// void SlaveTaskFxn_12(void *a0, void *a1) __attribute__((section(".task_12")));
+// void SlaveTaskFxn_13(void *a0, void *a1) __attribute__((section(".task_13")));
+// void SlaveTaskFxn_14(void *a0, void *a1) __attribute__((section(".task_14")));
+// void SlaveTaskFxn_15(void *a0, void *a1) __attribute__((section(".task_15")));
 
 static uint8_t MainApp_TaskStack[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_0[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_1[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_2[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_3[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_4[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_5[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_6[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_7[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_8[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_9[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_10[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_11[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_12[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_13[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_14[TASK_STACK_SIZE] __attribute__((aligned(32)));
-static uint8_t SlaveTaskStack_15[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_0[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_1[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_2[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_3[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_4[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_5[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_6[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_7[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_8[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_9[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_10[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_11[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_12[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_13[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_14[TASK_STACK_SIZE] __attribute__((aligned(32)));
+// static uint8_t SlaveTaskStack_15[TASK_STACK_SIZE] __attribute__((aligned(32)));
 
 typedef struct
 {
@@ -287,73 +287,73 @@ void _system_post_cinit(void)
 #endif
 #endif
 
-void multicore_wait() __attribute__((optnone))
-{
-/* Hold MCU1_0 for some time to avoid race condition b/w MCU1_0 and MCU2_0 while reading/writing to GPIO pins */
-#if defined(BUILD_MCU1_0) && defined(MULTICORE)
-    Osal_delay(500);
-#endif
+// void multicore_wait() __attribute__((optnone))
+// {
+// /* Hold MCU1_0 for some time to avoid race condition b/w MCU1_0 and MCU2_0 while reading/writing to GPIO pins */
+// #if defined(BUILD_MCU1_0) && defined(MULTICORE)
+//     Osal_delay(500);
+// #endif
 
-/* Using a GPIO pin for syncronization */
-#ifdef MULTICORE
-    uint32_t gpio_pin_num = 2U;
-    GPIOSetDirMode_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, GPIO_DIRECTION_OUTPUT);
-#ifdef BUILD_MCU1_0
-    GPIOPinWrite_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, 1);
-    while (GPIOPinRead_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num))
-    {
-    }
-#else
-    while (!GPIOPinRead_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num))
-    {
-    }
-    GPIOPinWrite_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, 0);
-#endif
-#endif
-}
+// /* Using a GPIO pin for syncronization */
+// #ifdef MULTICORE
+//     uint32_t gpio_pin_num = 2U;
+//     GPIOSetDirMode_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, GPIO_DIRECTION_OUTPUT);
+// #ifdef BUILD_MCU1_0
+//     GPIOPinWrite_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, 1);
+//     while (GPIOPinRead_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num))
+//     {
+//     }
+// #else
+//     while (!GPIOPinRead_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num))
+//     {
+//     }
+//     GPIOPinWrite_v0(CSL_WKUP_GPIO0_BASE, gpio_pin_num, 0);
+// #endif
+// #endif
+// }
 
 /* The fucntion definition for all the tasks.  */
-#define TSKFN                                                                                   \
-    msg *rp;                                                                                    \
-    int i, j;                                                                                   \
-    while (1)                                                                                   \
-    {                                                                                           \
-        SemaphoreP_pend((SemaphoreP_Handle)gSemaphorePHandle[(uint32_t)a0], osal_WAIT_FOREVER); \
-        while (QueueP_EMPTY != QueueP_isEmpty(myQ[(uint32_t)a0]))                               \
-        {                                                                                       \
-            rp = QueueP_get(myQ[(uint32_t)a0]);                                                 \
-            switch (test_mode)                                                                  \
-            {                                                                                   \
-            case READ_MODE:                                                                     \
-                for (i = 0; i < iter; ++i)                                                      \
-                {                                                                               \
-                    for (j = 0; j < mem_size; ++j)                                              \
-                        sum += buf[0][j];                                                       \
-                }                                                                               \
-                break;                                                                          \
-            case WRITE_MODE:                                                                    \
-                for (i = 0; i < iter; ++i)                                                      \
-                {                                                                               \
-                    for (j = 0; j < mem_size; ++j)                                              \
-                        buf[0][j] = 0xDEADBEEF;                                                 \
-                }                                                                               \
-                break;                                                                          \
-            case COPY_MODE:                                                                     \
-                for (i = 0; i < iter; ++i)                                                      \
-                {                                                                               \
-                    for (j = 0; j < mem_size; ++j)                                              \
-                        buf_ocmc[j] = buf[0][j];                                                \
-                }                                                                               \
-                break;                                                                          \
-            default:                                                                            \
-                AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");               \
-                return;                                                                         \
-            }                                                                                   \
-            rp->task_call_number = rp->task_call_number + 1;                                    \
-        }                                                                                       \
-        SemaphoreP_post((SemaphoreP_Handle)gSemaphorePHandle[(uint32_t)a0]);                    \
-        TaskP_yield();                                                                          \
-    }
+// #define TSKFN                                                                                   \
+//     msg *rp;                                                                                    \
+//     int i, j;                                                                                   \
+//     while (1)                                                                                   \
+//     {                                                                                           \
+//         SemaphoreP_pend((SemaphoreP_Handle)gSemaphorePHandle[(uint32_t)a0], osal_WAIT_FOREVER); \
+//         while (QueueP_EMPTY != QueueP_isEmpty(myQ[(uint32_t)a0]))                               \
+//         {                                                                                       \
+//             rp = QueueP_get(myQ[(uint32_t)a0]);                                                 \
+//             switch (test_mode)                                                                  \
+//             {                                                                                   \
+//             case READ_MODE:                                                                     \
+//                 for (i = 0; i < iter; ++i)                                                      \
+//                 {                                                                               \
+//                     for (j = 0; j < mem_size; ++j)                                              \
+//                         sum += buf[0][j];                                                       \
+//                 }                                                                               \
+//                 break;                                                                          \
+//             case WRITE_MODE:                                                                    \
+//                 for (i = 0; i < iter; ++i)                                                      \
+//                 {                                                                               \
+//                     for (j = 0; j < mem_size; ++j)                                              \
+//                         buf[0][j] = 0xDEADBEEF;                                                 \
+//                 }                                                                               \
+//                 break;                                                                          \
+//             case COPY_MODE:                                                                     \
+//                 for (i = 0; i < iter; ++i)                                                      \
+//                 {                                                                               \
+//                     for (j = 0; j < mem_size; ++j)                                              \
+//                         buf_ocmc[j] = buf[0][j];                                                \
+//                 }                                                                               \
+//                 break;                                                                          \
+//             default:                                                                            \
+//                 AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");               \
+//                 return;                                                                         \
+//             }                                                                                   \
+//             rp->task_call_number = rp->task_call_number + 1;                                    \
+//         }                                                                                       \
+//         SemaphoreP_post((SemaphoreP_Handle)gSemaphorePHandle[(uint32_t)a0]);                    \
+//         TaskP_yield();                                                                          \
+//     }
 
 /* The hook function defiend to be called at every task switch to count the
  * number of task switches per test  case
@@ -377,14 +377,14 @@ void MasterTask(void *a0, void *a1)
 {
     AppUtils_Printf("\n\rmaster_task\n\r");
     uint32_t icm, ica, icnt;
-    msg r[NUM_TASK];
+    // msg r[NUM_TASK];
     int i, j;
     uint32_t set = 0, way = 0;
     unsigned int bandwidth = 0;
-    for (i = 0; i < NUM_TASK; ++i)
-    {
-        myQ[i] = QueueP_create(NULL);
-    }
+    // for (i = 0; i < NUM_TASK; ++i)
+    // {
+    //     myQ[i] = QueueP_create(NULL);
+    // }
 
     AppUtils_Printf("\n\rmaster_task -- start sending\n\r");
 
@@ -432,17 +432,45 @@ void MasterTask(void *a0, void *a1)
                 }
             }
             CSL_armR5CacheInvalidateAllIcache();
-            /* Get a random task number*/
-            j = get_rand();
-            r[j].task_call_number = count++;
-            /* Add the message to the queue of the task */
-            QueueP_put(myQ[j], &(r[j].elem));
-            /* Signal the task to start executing */
-            SemaphoreP_post((SemaphoreP_Handle)gSemaphorePHandle[j]);
-            /* Yield the CPU for the other task to execute*/
-            TaskP_yield();
-            /* Wait for the task to complete */
-            SemaphoreP_pend((SemaphoreP_Handle)gSemaphorePHandle[j], osal_WAIT_FOREVER);
+            // /* Get a random task number*/
+            // j = get_rand();
+            // r[j].task_call_number = count++;
+            // /* Add the message to the queue of the task */
+            // QueueP_put(myQ[j], &(r[j].elem));
+            // /* Signal the task to start executing */
+            // SemaphoreP_post((SemaphoreP_Handle)gSemaphorePHandle[j]);
+            // /* Yield the CPU for the other task to execute*/
+            // TaskP_yield();
+            // /* Wait for the task to complete */
+            // SemaphoreP_pend((SemaphoreP_Handle)gSemaphorePHandle[j], osal_WAIT_FOREVER);
+            switch (test_mode)
+            {
+            case READ_MODE:
+                for (i = 0; i < iter; ++i)
+                {
+                    for (j = 0; j < mem_size; ++j)
+                        sum += buf[0][j];
+                }
+                break;
+            case WRITE_MODE:
+                for (i = 0; i < iter; ++i)
+                {
+                    for (j = 0; j < mem_size; ++j)
+                        buf[0][j] = 0xDEADBEEF;
+                }
+                break;
+            case COPY_MODE:
+                for (i = 0; i < iter; ++i)
+                {
+                    for (j = 0; j < mem_size; ++j)
+                        buf_ocmc[j] = buf[0][j];
+                }
+                break;
+            default:
+                AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
+                return;
+            }
+            count++;
         }
 
         elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
@@ -594,41 +622,41 @@ int do_main(void)
     }
 
     /*task Function pointer array*/
-    TaskP_Fxn tasks[NUM_TASK];
-    tasks[0] = SlaveTaskFxn_0;
-    tasks[1] = SlaveTaskFxn_1;
-    tasks[2] = SlaveTaskFxn_2;
-    tasks[3] = SlaveTaskFxn_3;
-    tasks[4] = SlaveTaskFxn_4;
-    tasks[5] = SlaveTaskFxn_5;
-    tasks[6] = SlaveTaskFxn_6;
-    tasks[7] = SlaveTaskFxn_7;
-    tasks[8] = SlaveTaskFxn_8;
-    tasks[9] = SlaveTaskFxn_9;
-    tasks[10] = SlaveTaskFxn_10;
-    tasks[11] = SlaveTaskFxn_11;
-    tasks[12] = SlaveTaskFxn_12;
-    tasks[13] = SlaveTaskFxn_13;
-    tasks[14] = SlaveTaskFxn_14;
-    tasks[15] = SlaveTaskFxn_15;
+    // TaskP_Fxn tasks[NUM_TASK];
+    // tasks[0] = SlaveTaskFxn_0;
+    // tasks[1] = SlaveTaskFxn_1;
+    // tasks[2] = SlaveTaskFxn_2;
+    // tasks[3] = SlaveTaskFxn_3;
+    // tasks[4] = SlaveTaskFxn_4;
+    // tasks[5] = SlaveTaskFxn_5;
+    // tasks[6] = SlaveTaskFxn_6;
+    // tasks[7] = SlaveTaskFxn_7;
+    // tasks[8] = SlaveTaskFxn_8;
+    // tasks[9] = SlaveTaskFxn_9;
+    // tasks[10] = SlaveTaskFxn_10;
+    // tasks[11] = SlaveTaskFxn_11;
+    // tasks[12] = SlaveTaskFxn_12;
+    // tasks[13] = SlaveTaskFxn_13;
+    // tasks[14] = SlaveTaskFxn_14;
+    // tasks[15] = SlaveTaskFxn_15;
 
-    void *taskStacks[NUM_TASK];
-    taskStacks[0] = SlaveTaskStack_0;
-    taskStacks[1] = SlaveTaskStack_1;
-    taskStacks[2] = SlaveTaskStack_2;
-    taskStacks[3] = SlaveTaskStack_3;
-    taskStacks[4] = SlaveTaskStack_4;
-    taskStacks[5] = SlaveTaskStack_5;
-    taskStacks[6] = SlaveTaskStack_6;
-    taskStacks[7] = SlaveTaskStack_7;
-    taskStacks[8] = SlaveTaskStack_8;
-    taskStacks[9] = SlaveTaskStack_9;
-    taskStacks[10] = SlaveTaskStack_10;
-    taskStacks[11] = SlaveTaskStack_11;
-    taskStacks[12] = SlaveTaskStack_12;
-    taskStacks[13] = SlaveTaskStack_13;
-    taskStacks[14] = SlaveTaskStack_14;
-    taskStacks[15] = SlaveTaskStack_15;
+    // void *taskStacks[NUM_TASK];
+    // taskStacks[0] = SlaveTaskStack_0;
+    // taskStacks[1] = SlaveTaskStack_1;
+    // taskStacks[2] = SlaveTaskStack_2;
+    // taskStacks[3] = SlaveTaskStack_3;
+    // taskStacks[4] = SlaveTaskStack_4;
+    // taskStacks[5] = SlaveTaskStack_5;
+    // taskStacks[6] = SlaveTaskStack_6;
+    // taskStacks[7] = SlaveTaskStack_7;
+    // taskStacks[8] = SlaveTaskStack_8;
+    // taskStacks[9] = SlaveTaskStack_9;
+    // taskStacks[10] = SlaveTaskStack_10;
+    // taskStacks[11] = SlaveTaskStack_11;
+    // taskStacks[12] = SlaveTaskStack_12;
+    // taskStacks[13] = SlaveTaskStack_13;
+    // taskStacks[14] = SlaveTaskStack_14;
+    // taskStacks[15] = SlaveTaskStack_15;
 
     /* array of buffers to be populated */
     buf[0] = buf_0;
@@ -670,20 +698,20 @@ int do_main(void)
 
     /* creating master and slave tasks*/
     main_task[0] = TaskP_create(&MasterTask, &taskParams);
-    for (i = 0; i < NUM_TASK; ++i)
-    {
-        taskParams.arg0 = (void *)i;
-        taskParams.stack = taskStacks[i];
-        main_task[i] = TaskP_create(tasks[i], &taskParams);
-    }
-    /* initializing the semaphores*/
-    SemaphoreP_Params semParams;
-    SemaphoreP_Params_init(&semParams);
-    semParams.mode = SemaphoreP_Mode_BINARY;
-    for (i = 0; i < NUM_TASK; ++i)
-    {
-        gSemaphorePHandle[i] = ((void *)SemaphoreP_create(0, &semParams));
-    }
+    // for (i = 0; i < NUM_TASK; ++i)
+    // {
+    //     taskParams.arg0 = (void *)i;
+    //     taskParams.stack = taskStacks[i];
+    //     main_task[i] = TaskP_create(tasks[i], &taskParams);
+    // }
+    // /* initializing the semaphores*/
+    // SemaphoreP_Params semParams;
+    // SemaphoreP_Params_init(&semParams);
+    // semParams.mode = SemaphoreP_Mode_BINARY;
+    // for (i = 0; i < NUM_TASK; ++i)
+    // {
+    //     gSemaphorePHandle[i] = ((void *)SemaphoreP_create(0, &semParams));
+    // }
 
     CSL_armR5PmuResetCntrs();
     uint32_t Val0 = CSL_armR5PmuReadCntr(0);
@@ -771,83 +799,83 @@ int main(void)
 #endif
 }
 
-void SlaveTaskFxn_0(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_0(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_1(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_1(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_2(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_2(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_3(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_3(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_4(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_4(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_5(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_5(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_6(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_6(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_7(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_7(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_8(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_8(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_9(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_9(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_10(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_10(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_11(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_11(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_12(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_12(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_13(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_13(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_14(void *a0, void *a1)
-{
-    TSKFN
-}
+// void SlaveTaskFxn_14(void *a0, void *a1)
+// {
+//     TSKFN
+// }
 
-void SlaveTaskFxn_15(void *a0, void *a1){
-    TSKFN}
+// void SlaveTaskFxn_15(void *a0, void *a1){
+//     TSKFN}
 
 /**
  *  \brief Printf utility
