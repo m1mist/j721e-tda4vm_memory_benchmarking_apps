@@ -50,8 +50,7 @@ __SVC_STACK_SIZE   = 0x0100;
 
 /* It is CRUCIAL that the TASK_SIZE be 0x1000 to be sure that the whole cache is filled by
     each task when it is loaded */
---define TASK_SIZE=0x1000
---define TEXT_SIZE=0xA0000
+--define TEXT_SIZE=0x40000
 --define BUF_SIZE=0x1000000
 
 --define OCMCRAM_START=0x41C82000
@@ -67,12 +66,12 @@ MEMORY
 {
     MCU0_R5F_TCMB0_VECS (X)  : origin=0x41010000                     length=0x100
     MCU0_R5F_TCMB0 (RWIX)	 : origin=0x41010100	                 length=0x8000-0x100
+
     BUF0                     : origin=DDR_START + (BUF_SIZE*0)                    length=BUF_SIZE
-
     BUF_CPY                  : origin=DDR_START + (BUF_SIZE*1)                   length=BUF_SIZE
-    OCMC_RAM (RWIX)          : origin=OCMCRAM_START                                     length=(OCMCRAM_END - OCMCRAM_START)
 
-    TEXT_ARR                 : origin=DDR_START + (BUF_SIZE*2) length=TEXT_SIZE
+    TEXT_ARR                 : origin=OCMCRAM_START length=TEXT_SIZE
+    OCMC_RAM (RWIX)          : origin=OCMCRAM_START + TEXT_SIZE                                     length=(OCMCRAM_END - (OCMCRAM_START + TEXT_SIZE))
 
 }
 

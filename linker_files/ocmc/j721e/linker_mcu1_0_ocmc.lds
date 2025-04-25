@@ -70,24 +70,9 @@ MEMORY
     BUF0                     : origin=SBL_RUNTIME_MEM + (BUF_SIZE*0)                    length=BUF_SIZE
     BUF_CPY                  : origin=SBL_RUNTIME_MEM + (BUF_SIZE*1)                   length=BUF_SIZE
 
-    TSK0                     : origin=OCMCRAM_START + (TASK_SIZE*0)   length=TASK_SIZE
-    TSK1                     : origin=OCMCRAM_START + (TASK_SIZE*1)   length=TASK_SIZE
-    TSK2                     : origin=OCMCRAM_START + (TASK_SIZE*2)   length=TASK_SIZE
-    TSK3                     : origin=OCMCRAM_START + (TASK_SIZE*3)   length=TASK_SIZE
-    TSK4                     : origin=OCMCRAM_START + (TASK_SIZE*4)   length=TASK_SIZE
-    TSK5                     : origin=OCMCRAM_START + (TASK_SIZE*5)   length=TASK_SIZE
-    TSK6                     : origin=OCMCRAM_START + (TASK_SIZE*6)   length=TASK_SIZE
-    TSK7                     : origin=OCMCRAM_START + (TASK_SIZE*7)   length=TASK_SIZE
-    TSK8                     : origin=OCMCRAM_START + (TASK_SIZE*8)   length=TASK_SIZE
-    TSK9                     : origin=OCMCRAM_START + (TASK_SIZE*9)   length=TASK_SIZE
-    TSK10                    : origin=OCMCRAM_START + (TASK_SIZE*10)  length=TASK_SIZE
-    TSK11                    : origin=OCMCRAM_START + (TASK_SIZE*11)  length=TASK_SIZE
-    TSK12                    : origin=OCMCRAM_START + (TASK_SIZE*12)  length=TASK_SIZE
-    TSK13                    : origin=OCMCRAM_START + (TASK_SIZE*13)  length=TASK_SIZE
-    TSK14                    : origin=OCMCRAM_START + (TASK_SIZE*14)  length=TASK_SIZE
-    TSK15                    : origin=OCMCRAM_START + (TASK_SIZE*15)  length=TASK_SIZE
-    TEXT_ARR                 : origin=OCMCRAM_START + (TASK_SIZE*16)  length=TEXT_SIZE
-    OCMC_RAM (RWIX)          : origin=OCMCRAM_START + (TASK_SIZE*16) + TEXT_SIZE length=(OCMCRAM_END - (OCMCRAM_START + (TASK_SIZE*16) + TEXT_SIZE))
+
+    TEXT_ARR                 : origin=OCMCRAM_START   length=TEXT_SIZE
+    OCMC_RAM (RWIX)          : origin=OCMCRAM_START + TEXT_SIZE length=(OCMCRAM_END - (OCMCRAM_START + TEXT_SIZE))
 
 
     MSMC (RWIX)              : origin=MSMC_START                                      length=0x80000
@@ -116,22 +101,6 @@ SECTIONS
     .sbl_mcu_1_0_resetvector               : {} palign(8)      > OCMC_RAM
 
     .text                                  : {} palign(8)      > TEXT_ARR
-    .task_0                                : {} palign(8)      > TSK0
-    .task_1                                : {} palign(8)      > TSK1
-    .task_2                                : {} palign(8)      > TSK2
-    .task_3                                : {} palign(8)      > TSK3
-    .task_4                                : {} palign(8)      > TSK4
-    .task_5                                : {} palign(8)      > TSK5
-    .task_6                                : {} palign(8)      > TSK6
-    .task_7                                : {} palign(8)      > TSK7
-    .task_8                                : {} palign(8)      > TSK8
-    .task_9                                : {} palign(8)      > TSK9
-    .task_10                               : {} palign(8)      > TSK10
-    .task_11                               : {} palign(8)      > TSK11
-    .task_12                               : {} palign(8)      > TSK12
-    .task_13                               : {} palign(8)      > TSK13
-    .task_14                               : {} palign(8)      > TSK14
-    .task_15                               : {} palign(8)      > TSK15
     .const.devgroup                        : {*(.const.devgroup*)} align(4)       > MSMC    
     .const                                 : {} palign(8)      > MSMC
     .rodata                                : {} palign(8)      > MSMC
@@ -144,21 +113,7 @@ SECTIONS
     .sysmem                                : {}                > MSMC
     .bss.devgroup                          : {*(.bss.devgroup*)} align(4)         > MSMC
     .buf_0                                 : {} align(4)       > BUF0
-    /* .buf_1                                 : {} align(4)       > BUF1
-    .buf_2                                 : {} align(4)       > BUF2
-    .buf_3                                 : {} align(4)       > BUF3
-    .buf_4                                 : {} align(4)       > BUF4
-    .buf_5                                 : {} align(4)       > BUF5
-    .buf_6                                 : {} align(4)       > BUF6
-    .buf_7                                 : {} align(4)       > BUF7
-    .buf_8                                 : {} align(4)       > BUF8
-    .buf_9                                 : {} align(4)       > BUF9
-    .buf_10                                : {} align(4)       > BUF10
-    .buf_11                                : {} align(4)       > BUF11
-    .buf_12                                : {} align(4)       > BUF12
-    .buf_13                                : {} align(4)       > BUF13
-    .buf_14                                : {} align(4)       > BUF14
-    .buf_15                                : {} align(4)       > BUF15 */
+
 
     .stack                                 : {} align(4)       > OCMC_RAM (HIGH)
 

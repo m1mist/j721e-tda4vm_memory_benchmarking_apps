@@ -70,12 +70,12 @@ MEMORY
 
     MCU0_R5F_TCMB0_VECS (X)  : origin=0x41014000                     length=0x100
     MCU0_R5F_TCMB0 (RWIX)	 : origin=0x41014100	                 length=0x4000-0x100
+
     BUF0                     : origin=DDR_START + (BUF_SIZE*0)                    length=BUF_SIZE
     BUF_CPY                  : origin=DDR_START + (BUF_SIZE*1)                   length=BUF_SIZE
     
     TEXT_ARR                 : origin=MAIN_OCMCRAM_START  length=TEXT_SIZE 
     OCMC_RAM (RWIX)          : origin=MAIN_OCMCRAM_START + TEXT_SIZE length=(MAIN_OCMCRAM_END - (MAIN_OCMCRAM_START + TEXT_SIZE))
-
     MSMC (X)                 : origin=0x70080000                      length=0x80000
 }
 
@@ -103,17 +103,17 @@ SECTIONS
 
 
     .text                                  : {} palign(8)      > TEXT_ARR
-    .const.devgroup                        : {*(.const.devgroup*)} align(4)     > MSMC
-    .const                                 : {} palign(8)      > MSMC
-    .rodata                                : {} palign(8)      > MSMC
-    .cinit                                 : {} palign(8)      > MSMC
-    .pinit                                 : {} palign(8)      > MSMC
-    .boardcfg_data                         : {} align(4)       > MSMC
-    .bss                                   : {} align(4)       > MSMC
+    .const.devgroup                        : {*(.const.devgroup*)} align(4)     > OCMC_RAM
+    .const                                 : {} palign(8)      > OCMC_RAM
+    .rodata                                : {} palign(8)      > OCMC_RAM
+    .cinit                                 : {} palign(8)      > OCMC_RAM
+    .pinit                                 : {} palign(8)      > OCMC_RAM
+    .boardcfg_data                         : {} align(4)       > OCMC_RAM
+    .bss                                   : {} align(4)       > OCMC_RAM
     .buf_cpy                               : {} align(4)       > BUF_CPY
-    .data                                  : {} palign(128)    > MSMC
-    .sysmem                                : {}                > MSMC
-    .bss.devgroup                          : {*(.bss.devgroup*)} align(4)       > MSMC
+    .data                                  : {} palign(128)    > OCMC_RAM
+    .sysmem                                : {}                > OCMC_RAM
+    .bss.devgroup                          : {*(.bss.devgroup*)} align(4)       > OCMC_RAM
     .buf_0                                 : {} align(4)       > BUF0
 
     .stack                                 : {} align(4)       > OCMC_RAM (HIGH)
