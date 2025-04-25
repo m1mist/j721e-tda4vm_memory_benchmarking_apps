@@ -110,17 +110,11 @@ static uint8_t gAppTskStackMain[APP_TSK_STACK_MAIN];
 static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 #endif
 
-/**< Initialize SCI Server, to process RM/PM Requests by other cores */
-
-#define NUM_TASK 16
-#define NUM_TEST 16
-#define BUF_SIZE 0x400000 // buf_size/sizeof(uint32_t)
-
-// #define MEM_CPY_OPER 2400000
-#define MEM_CPY_OPER 500 // min > 10 msec
-#define BUFFER_IN_USE 2
-#define TASK_STACK_SIZE 0x1000
-
+/**
+ * *********************************
+ *             在此修改模式          *
+ * *********************************
+ */
 #define READ_MODE 0
 #define WRITE_MODE 1
 #define COPY_MODE 2
@@ -130,24 +124,41 @@ static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 //  2 - Copy Mode
 uint32_t test_mode = WRITE_MODE;
 
-// Types_FreqHz freq1;
+#define NUM_TASK 16
+
+#if defined(BUILD_DDR)
+#define BUF_SIZE 0x400000 // buf_size/sizeof(uint32_t) 16mb 4194304
+#define NUM_TEST 20
+/* For each test case the  size of the memcpy buffer can be defined
+ * individually. Lesser the value more is the number of cache misses per
+ * second but reduced run time as the number of instructions executed
+ * reduces and the memcpy instructions still remain in the cache */
+uint32_t mem_size_arr[NUM_TEST] = {50, 100, 200, 500, 750, 1000, 1250,
+                                   1500, 2048, 4096, 8192, 16384, 32768,
+                                   65536, 131072, 262144, 524288, 1048576, 2097152, BUF_SIZE};
+#else
+#define BUF_SIZE 0x8000 // buf_size/sizeof(uint32_t) 128kb
+#define NUM_TEST 16
+/* For each test case the  size of the memcpy buffer can be defined
+ * individually. Lesser the value more is the number of cache misses per
+ * second but reduced run time as the number of instructions executed
+ * reduces and the memcpy instructions still remain in the cache */
+uint32_t mem_size_arr[NUM_TEST] = {50, 100, 200, 500, 750, 1000, 1250,
+                                   1500, 2048, 4096, 8192, 16384, BUF_SIZE};
+#endif
+
+#define BUFFER_IN_USE 2
+#define TASK_STACK_SIZE 0x1000
 
 /* task_calls is the number of random calls to the slave tasks for different
  * test cases. This can be used to controll the runtime of the code
  */
 uint32_t task_calls = 200;
 
-/* For each test case the  size of the memcpy buffer can be defined
- * individually. Lesser the value more is the number of cache misses per
- * second but reduced run time as the number of instructions executed
- * reduces and the memcpy instructions still remain in the cache */
-uint32_t mem_size_arr[NUM_TEST] = {0, 50, 100, 200, 500, 750, 1000, 1250,
-                                   1500, 2048, 4096, 8192, 16384, BUF_SIZE};
-
 /* Array to hold the bandwidth result in Byte/sec*/
-uint32_t bandwidths[NUM_TASK];
+uint32_t bandwidths[NUM_TEST];
 /* Array to hold the execution time result in usec*/
-uint32_t times[NUM_TASK];
+uint32_t times[NUM_TEST];
 
 /* Variable to pick up value from the mem_size_arr for each test*/
 uint32_t mem_size = 0;
@@ -203,15 +214,9 @@ void memoryBenchmarking_setupSciServer(void *arg0, void *arg1)
 uint32_t buf_0[BUF_SIZE] __attribute__((section(".buf_0")));
 
 /* The target buffer for all the memcpy operations */
-uint32_t buf_ocmc[BUF_SIZE] __attribute__((section(".buf_cpy")));
+uint32_t dst[BUF_SIZE] __attribute__((section(".buf_cpy")));
 
 static uint8_t MainApp_TaskStack[TASK_STACK_SIZE] __attribute__((aligned(32)));
-
-typedef struct
-{
-    QueueP_Elem elem;
-    uint32_t task_call_number;
-} msg;
 
 #ifdef BUILD_MCU2_0
 #if (defined(SOC_J7200) || defined(SOC_J721S2) || defined(SOC_J784S4) || defined(SOC_J742S2))
@@ -261,7 +266,6 @@ void MasterTask(void *a0, void *a1)
         AppUtils_Printf("Write Mode\n\r");
     }
 
-    uint32_t icm, ica, icnt;
 
     int i, j, k;
     uint32_t set = 0, way = 0;
@@ -331,7 +335,7 @@ void MasterTask(void *a0, void *a1)
                 for (k = 0; k < iter; ++k)
                 {
                     for (j = 0; j < mem_size; ++j)
-                        buf_ocmc[j] = buf[0][j];
+                        dst[j] = buf[0][j];
                 }
                 break;
             default:
@@ -348,24 +352,11 @@ void MasterTask(void *a0, void *a1)
         secs = durationInSecs - (hrs * 60U * 60U) - (mins * 60U);
         usecs = elapsedTime - (((hrs * 60U * 60U) + (mins * 60U) + secs) * 1000000U);
 
-        /* Read the value of the PMU counteres and print the result */
-        icm = CSL_armR5PmuReadCntr(0);
-        ica = CSL_armR5PmuReadCntr(2);
-        // dcm = CSL_armR5PmuReadCntr(1);
-        icnt = CSL_armR5PmuReadCntr(1);
         AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
         AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
         AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
         AppUtils_Printf("Iter            => %d\n", (unsigned int)iter);
         AppUtils_Printf("Task Calls      => %d\n", task_calls);
-        AppUtils_Printf("Inst Cache Miss => %d\n", icm);
-        AppUtils_Printf("Inst Cache Acc  => %d\n", ica);
-        AppUtils_Printf("Num Instr Exec  => %d\n", icnt);
-        /* I can't say that I understand this hack, but something happened in CLANG that broke the prints for unsigned prints - this does the trick. */
-        AppUtils_Printf("ICM/sec         => %u\n", (unsigned int)(1000000 * ((float)(icm * 1.0) / (elapsedTime * 1.0)))); // (unsigned long)  ((uint64_t)icm*1000000)/((uint64_t)elapsedTime));
-        printf("ICM/sec         => %u\n", (unsigned int)(1000000 * ((float)(icm * 1.0) / (elapsedTime * 1.0))));          // (unsigned long)  ((uint64_t)icm*1000000)/((uint64_t)elapsedTime));
-        AppUtils_Printf("INST/sec        => %u\n", (unsigned int)(1000000 * ((float)(icnt * 1.0) / (elapsedTime * 1.0))));
-        printf("INST/sec        => %u\n", (unsigned int)(1000000 * ((float)(icnt * 1.0) / (elapsedTime * 1.0)))); // (unsigned long)  ((uint64_t)icm*1000000)/((uint64_t)elapsedTime));
 
         AppUtils_Printf("Bandwidth(Byte/s)  => %u\n", (unsigned int)(1000000 * ((float)(mem_size * task_calls * iter * 4.0) / (elapsedTime * 1.0))));
         bandwidth = (unsigned int)(1000000 * ((float)(mem_size * task_calls * iter * 4.0) / (elapsedTime * 1.0)));
@@ -385,18 +376,23 @@ void MasterTask(void *a0, void *a1)
             AppUtils_Printf("Reseting buffers...\n");
             for (j = 0; j < BUF_SIZE; ++j)
             {
-                buf_ocmc[j] = 0;
+                dst[j] = 0;
             }
         }
     }
     AppUtils_Printf("\n*****All bandwidths and times*****\n");
+    AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
+    for (i = 0; i < NUM_TEST; i++)
+    {
+        AppUtils_Printf("%u\n", mem_size_arr[i]);
+    }
     AppUtils_Printf("bandwidths(Byte/s):\n");
-    for (i = 0; i < NUM_TASK; i++)
+    for (i = 0; i < NUM_TEST; i++)
     {
         AppUtils_Printf("%u\n", bandwidths[i]);
     }
     AppUtils_Printf("times(us)):\n");
-    for (i = 0; i < NUM_TASK; i++)
+    for (i = 0; i < NUM_TEST; i++)
     {
         AppUtils_Printf("%u\n", times[i]);
     }
