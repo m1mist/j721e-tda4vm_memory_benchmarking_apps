@@ -122,7 +122,7 @@ static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 //  0 - Read Mode
 //  1 - Write Mode
 //  2 - Copy Mode
-uint32_t test_mode = WRITE_MODE;
+uint32_t test_mode = COPY_MODE;
 
 #define NUM_TASK 16
 
@@ -149,11 +149,7 @@ uint32_t mem_size_arr[NUM_TEST] = {50, 100, 200, 500, 750, 1000, 1250,
 
 #define BUFFER_IN_USE 2
 #define TASK_STACK_SIZE 0x1000
-
-/* task_calls is the number of random calls to the slave tasks for different
- * test cases. This can be used to controll the runtime of the code
- */
-uint32_t task_calls = 200;
+#define ITERATION 100
 
 /* Array to hold the bandwidth result in Byte/sec*/
 uint32_t bandwidths[NUM_TEST];
@@ -162,12 +158,6 @@ uint32_t times[NUM_TEST];
 
 /* Variable to pick up value from the mem_size_arr for each test*/
 uint32_t mem_size = 0;
-
-/* Number of times each slave task must repeat the operation.
- * This can be used the control the execution time of the code without much
- * impact on the cache misses
- */
-uint32_t iter = 10;
 
 /* Counter for the number of sysbios task switches that occur during the
  * execution of the code
@@ -248,7 +238,7 @@ uint32_t get_rand()
 
 uint32_t hrs, mins, secs, durationInSecs, usecs;
 uint32_t startTime, elapsedTime;
-
+void testTCM();
 /* Master task which will call the slave tasks randomly and */
 void MasterTask(void *a0, void *a1)
 {
@@ -266,8 +256,7 @@ void MasterTask(void *a0, void *a1)
         AppUtils_Printf("Write Mode\n\r");
     }
 
-
-    int i, j, k;
+    int i, j;
     uint32_t set = 0, way = 0;
     unsigned int bandwidth = 0;
 
@@ -301,7 +290,7 @@ void MasterTask(void *a0, void *a1)
 
         startTime = AppUtils_getCurTimeInUsec();
         /*start sending signals and messages to tasks*/
-        while (count < task_calls)
+        while (count < ITERATION)
         {
             /*invalidate all the cache to get fresh and reliable data*/
             numSets = CSL_armR5CacheGetNumSets();
@@ -318,25 +307,16 @@ void MasterTask(void *a0, void *a1)
             switch (test_mode)
             {
             case READ_MODE:
-                for (k = 0; k < iter; ++k)
-                {
-                    for (j = 0; j < mem_size; ++j)
-                        sum += buf[0][j];
-                }
+                for (j = 0; j < mem_size; ++j)
+                    sum += buf[0][j];
                 break;
             case WRITE_MODE:
-                for (k = 0; k < iter; ++k)
-                {
-                    for (j = 0; j < mem_size; ++j)
-                        buf[0][j] = 0xDEADBEEF;
-                }
+                for (j = 0; j < mem_size; ++j)
+                    buf[0][j] = 0xDEADBEEF;
                 break;
             case COPY_MODE:
-                for (k = 0; k < iter; ++k)
-                {
-                    for (j = 0; j < mem_size; ++j)
-                        dst[j] = buf[0][j];
-                }
+                for (j = 0; j < mem_size; ++j)
+                    dst[j] = buf[0][j];
                 break;
             default:
                 AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
@@ -355,11 +335,10 @@ void MasterTask(void *a0, void *a1)
         AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
         AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
         AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
-        AppUtils_Printf("Iter            => %d\n", (unsigned int)iter);
-        AppUtils_Printf("Task Calls      => %d\n", task_calls);
+        AppUtils_Printf("Iter            => %d\n", (unsigned int)ITERATION);
 
-        AppUtils_Printf("Bandwidth(Byte/s)  => %u\n", (unsigned int)(1000000 * ((float)(mem_size * task_calls * iter * 4.0) / (elapsedTime * 1.0))));
-        bandwidth = (unsigned int)(1000000 * ((float)(mem_size * task_calls * iter * 4.0) / (elapsedTime * 1.0)));
+        AppUtils_Printf("Bandwidth(Byte/s)  => %d\n", (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))));
+        bandwidth = (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0)));
         bandwidths[i] = bandwidth;
         times[i] = elapsedTime;
 
@@ -384,22 +363,175 @@ void MasterTask(void *a0, void *a1)
     AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
     for (i = 0; i < NUM_TEST; i++)
     {
-        AppUtils_Printf("%u\n", mem_size_arr[i]);
+        AppUtils_Printf("%d\n", mem_size_arr[i]);
     }
     AppUtils_Printf("bandwidths(Byte/s):\n");
     for (i = 0; i < NUM_TEST; i++)
     {
-        AppUtils_Printf("%u\n", bandwidths[i]);
+        AppUtils_Printf("%d\n", bandwidths[i]);
     }
     AppUtils_Printf("times(us)):\n");
     for (i = 0; i < NUM_TEST; i++)
     {
-        AppUtils_Printf("%u\n", times[i]);
+        AppUtils_Printf("%d\n", times[i]);
     }
     AppUtils_Printf("\nAll tests have passed\n");
+    // testTCM();
     OS_stop();
 }
+// uint32_t buf_tcm[2048] __attribute__((section(".buf_tcm")));
 
+// void testTCM()
+// {
+//     uint32_t start_time_dopen, elapsed_dopen;
+//     uint32_t start_time_dclose, elapsed_dclose;
+//     uint32_t currTime;
+//     int i, j;
+
+//     CSL_armR5Dsb();
+//     CSL_armR5CacheInvalidateAllDcache();
+//     CSL_armR5CacheEnableDCache(1U);
+//     /* measure with D-cache enabled */
+//     start_time_dopen = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             buf_tcm[j] = 0x22222222;
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dopen)
+//     {
+//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dopen = currTime - start_time_dopen;
+//     }
+//     AppUtils_Printf("TCM write D-cache enabled Start = %d µs\n", start_time_dopen);
+//     AppUtils_Printf("TCM write D-cache enabled end = %d µs\n", currTime);
+
+//     /* Make sure D-cache is disable */
+//     /* disable D-cache */
+//     CSL_armR5CacheEnableDCache(0U);
+//     start_time_dclose = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             buf_tcm[j] = 0x11111111;
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dclose)
+//     {
+//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dclose = currTime - start_time_dclose;
+//     }
+//     AppUtils_Printf("TCM write D-cache disable Start = %d µs\n", start_time_dclose);
+//     AppUtils_Printf("TCM write D-cache disable end = %d µs\n", currTime);
+
+//     AppUtils_Printf(
+//         "TCM write 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
+//         elapsed_dopen, elapsed_dclose);
+//     //--------------------------------------------------------
+
+//     CSL_armR5Dsb();
+//     CSL_armR5CacheInvalidateAllDcache();
+//     CSL_armR5CacheEnableDCache(1U);
+//     /* measure with D-cache enabled */
+//     sum = 0;
+//     start_time_dopen = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             sum += buf_tcm[j];
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dopen)
+//     {
+//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dopen = currTime - start_time_dopen;
+//     }
+//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
+//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
+
+//     start_time_dopen = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             sum += buf_tcm[j];
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dopen)
+//     {
+//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dopen = currTime - start_time_dopen;
+//     }
+//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
+//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
+//     /* Make sure D-cache is disable */
+//     /* disable D-cache */
+//     sum = 0;
+//     CSL_armR5CacheEnableDCache(0U);
+//     start_time_dclose = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             sum += buf_tcm[j];
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dclose)
+//     {
+//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dclose = currTime - start_time_dclose;
+//     }
+//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
+//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
+
+//     start_time_dclose = AppUtils_getCurTimeInUsec();
+//     for (i = 0; i < 500; i++)
+//     {
+//         for (j = 0; j < 2048; j++)
+//         {
+//             sum += buf_tcm[j];
+//         }
+//     }
+//     currTime = AppUtils_getCurTimeInUsec();
+//     if (currTime < start_time_dclose)
+//     {
+//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
+//     }
+//     else
+//     {
+//         elapsed_dclose = currTime - start_time_dclose;
+//     }
+//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
+//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
+
+//     AppUtils_Printf(
+//         "TCM read 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
+//         elapsed_dopen, elapsed_dclose);
+// }
 int do_main(void)
 {
 
