@@ -50,7 +50,7 @@ __SVC_STACK_SIZE   = 0x0100;
 
 /* It is CRUCIAL that the TASK_SIZE be 0x1000 to be sure that the whole cache is filled by
     each task when it is loaded */
---define TEXT_SIZE=0x40000
+--define TEXT_SIZE=0x20000
 --define BUF_SIZE=0x1000000
 
 --define OCMCRAM_START=0x41C82000

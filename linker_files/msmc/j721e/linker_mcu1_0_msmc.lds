@@ -51,8 +51,8 @@ __SVC_STACK_SIZE   = 0x0100;
 /* It is CRUCIAL that the TASK_SIZE be 0x1000 to be sure that the whole cache is filled by
     each task when it is loaded */
 --define TASK_SIZE=0x1000
---define TEXT_SIZE=0x40000
---define BUF_SIZE=0x40000
+--define TEXT_SIZE=0x20000
+--define BUF_SIZE=0x20000
 
 --define OCMCRAM_START=0x41C82000
 --define OCMCRAM_END=0x41CFFFFF
@@ -69,10 +69,11 @@ MEMORY
 
     BUF0                     : origin=MSMC_START + (BUF_SIZE*0)                    length=BUF_SIZE
     BUF_CPY                  : origin=MSMC_START + (BUF_SIZE*1)           length=BUF_SIZE
-
+    
+    TEXT_ARR                 : origin=OCMCRAM_START  length=TEXT_SIZE
     OCMC_RAM (RWIX)          : origin=OCMCRAM_START + TEXT_SIZE                 length=(OCMCRAM_END - OCMCRAM_START - TEXT_SIZE)
 
-    TEXT_ARR                 : origin=OCMCRAM_START  length=TEXT_SIZE
+    
 }
 
 SECTIONS

@@ -52,7 +52,7 @@ __SVC_STACK_SIZE   = 0x0100;
     each task when it is loaded */
 --define TASK_SIZE=0x1000
 --define TEXT_SIZE=0x40000
---define BUF_SIZE=0x40000
+--define BUF_SIZE=0x20000
 
 --define MAIN_OCMCRAM_START=0x03600000
 --define MAIN_OCMCRAM_END=0x0367FFFF
