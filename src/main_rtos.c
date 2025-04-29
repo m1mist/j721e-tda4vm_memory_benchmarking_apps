@@ -118,11 +118,24 @@ static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 #define READ_MODE 0
 #define WRITE_MODE 1
 #define COPY_MODE 2
+#define TEST_END 3
 // test_mode is used to control the type of test case to be run.
 //  0 - Read Mode
 //  1 - Write Mode
 //  2 - Copy Mode
-uint32_t test_mode = COPY_MODE;
+uint32_t test_mode;
+#define ALL_INVALIDATE 0
+#define ICACHE_INVALIDATE 1
+#define DCACHE_INVALIDATE 2
+#define NO_INVALIDATE 3
+#define END 4
+/* cache_mode is used to control the type of cache invalidation to be run.
+ *  0 - All Invalidate
+ *  1 - ICACHE Invalidate
+ *  2 - DCACHE Invalidate
+ *  3 - No Invalidate
+ */
+uint16_t cache_mode;
 
 #define NUM_TASK 16
 
@@ -230,308 +243,207 @@ void _system_post_cinit(void)
 #endif
 #endif
 
-/* Get a random number depending upon the number of tasks*/
-uint32_t get_rand()
-{
-    return (rand() % NUM_TASK);
-}
-
 uint32_t hrs, mins, secs, durationInSecs, usecs;
 uint32_t startTime, elapsedTime;
-void testTCM();
 /* Master task which will call the slave tasks randomly and */
 void MasterTask(void *a0, void *a1)
 {
-    AppUtils_Printf("\n\rmaster_task\n\r");
-    if (test_mode == COPY_MODE)
+    test_mode = READ_MODE;       // default test mode
+    cache_mode = ALL_INVALIDATE; // default cache mode
+    AppUtils_Printf("\n\rmaster_task -- start\n\r");
+    /* this loop is for the number of test modes to be performed */
+    while (test_mode != TEST_END)
     {
-        AppUtils_Printf("Copy Mode\n\r");
-    }
-    else if (test_mode == READ_MODE)
-    {
-        AppUtils_Printf("Read Mode\n\r");
-    }
-    else if (test_mode == WRITE_MODE)
-    {
-        AppUtils_Printf("Write Mode\n\r");
-    }
-
-    int i, j;
-    uint32_t set = 0, way = 0;
-    unsigned int bandwidth = 0;
-
-    AppUtils_Printf("\n\rmaster_task -- start sending\n\r");
-
-    uint32_t count = 0;
-    /* this loop is for NUM_TEST with the specified task calls and memcpy_size*/
-    for (i = 0; i < NUM_TEST; ++i)
-    {
-        /* counter to track the task calls already made*/
-        count = 0;
-        /*reset the value of task switch for that test*/
-        num_switches = 0;
-        /* size of the memcpy to be performed by each task*/
-        mem_size = mem_size_arr[i];
-        /*invalidate all the cache to get fresh and reliable data*/
-        uint32_t numSets = CSL_armR5CacheGetNumSets();
-        uint32_t numWays = CSL_armR5CacheGetNumWays();
-        for (set = 0; set < numSets; set++)
+        /* this loop is for the number of cache modes to be performed */
+        while (cache_mode != END)
         {
-            for (way = 0; way < numWays; way++)
+            int i, j;
+            uint32_t set = 0, way = 0;
+            unsigned int bandwidth = 0;
+            AppUtils_Printf("test started...\n");
+
+            uint32_t count = 0;
+            /* this loop is for the number of tests to be performed */
+            for (i = 0; i < NUM_TEST; ++i)
             {
-                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-            }
-        }
+                count = 0;                  // reset the count for each test
+                mem_size = mem_size_arr[i]; // get the size of the buffer for each test
 
-        CSL_armR5CacheInvalidateAllIcache();
-
-        /* reset the PMU counters to get relevant data */
-        CSL_armR5PmuResetCntrs();
-
-        startTime = AppUtils_getCurTimeInUsec();
-        /*start sending signals and messages to tasks*/
-        while (count < ITERATION)
-        {
-            /*invalidate all the cache to get fresh and reliable data*/
-            numSets = CSL_armR5CacheGetNumSets();
-            numWays = CSL_armR5CacheGetNumWays();
-            for (set = 0; set < numSets; set++)
-            {
-                for (way = 0; way < numWays; way++)
+                /*invalidate all the cache to get fresh and reliable data*/
+                uint32_t numSets = CSL_armR5CacheGetNumSets();
+                uint32_t numWays = CSL_armR5CacheGetNumWays();
+                for (set = 0; set < numSets; set++)
                 {
-                    CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                    for (way = 0; way < numWays; way++)
+                    {
+                        CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                    }
+                }
+                CSL_armR5CacheInvalidateAllIcache();
+                /* reset the PMU counters to get relevant data */
+                CSL_armR5PmuResetCntrs();
+
+                startTime = AppUtils_getCurTimeInUsec();
+                /* this loop is for the number of iterations to be performed */
+                while (count < ITERATION)
+                {
+                    switch (cache_mode)
+                    {
+                    case ALL_INVALIDATE:
+                        /*invalidate the cache to get fresh and reliable data*/
+                        numSets = CSL_armR5CacheGetNumSets();
+                        numWays = CSL_armR5CacheGetNumWays();
+                        for (set = 0; set < numSets; set++)
+                        {
+                            for (way = 0; way < numWays; way++)
+                            {
+                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                            }
+                        }
+                    case ICACHE_INVALIDATE:
+                        CSL_armR5CacheInvalidateAllIcache();
+                        break;
+
+                    case DCACHE_INVALIDATE:
+                        numSets = CSL_armR5CacheGetNumSets();
+                        numWays = CSL_armR5CacheGetNumWays();
+                        for (set = 0; set < numSets; set++)
+                        {
+                            for (way = 0; way < numWays; way++)
+                            {
+                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                            }
+                        }
+                        break;
+                    case NO_INVALIDATE:
+                        break;
+                    default:
+                        AppUtils_Printf("Invalid cache_mode! Master task do nothing. \r\n");
+                        return;
+                    }
+
+                    switch (test_mode)
+                    {
+                    case READ_MODE:
+                        for (j = 0; j < mem_size; ++j)
+                            sum += buf[0][j];
+                        break;
+                    case WRITE_MODE:
+                        for (j = 0; j < mem_size; ++j)
+                            buf[0][j] = 0xDEADBEEF;
+                        break;
+                    case COPY_MODE:
+                        for (j = 0; j < mem_size; ++j)
+                            dst[j] = buf[0][j];
+                        break;
+                    default:
+                        AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
+                        return;
+                    }
+                    count++;
+                }
+
+                elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
+                durationInSecs = ((elapsedTime) / 1000U);
+                hrs = durationInSecs / (60U * 60U);
+                mins = (durationInSecs / 60U) - (hrs * 60U);
+                secs = durationInSecs - (hrs * 60U * 60U) - (mins * 60U);
+                usecs = elapsedTime - (((hrs * 60U * 60U) + (mins * 60U) + secs) * 1000000U);
+
+                // AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
+                // AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
+                // AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
+                // AppUtils_Printf("Iter            => %d\n", (unsigned int)ITERATION);
+
+                // AppUtils_Printf("Bandwidth(Byte/s)  => %d\n", (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))));
+
+                bandwidth = (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))); // bandwidth in Byte/s
+                bandwidths[i] = bandwidth;                                                                         // store the bandwidth in the array
+                times[i] = elapsedTime;                                                                            // store the time in the array
+
+                if (test_mode == WRITE_MODE)
+                {
+                    /* Reset the buffer to avoid cache misses */
+                    AppUtils_Printf("Reseting buffers...\n");
+                    for (j = 0; j < BUF_SIZE; ++j)
+                    {
+                        buf[0][j] = j;
+                    }
+                }
+                else if (test_mode == COPY_MODE)
+                {
+                    /* Reset the buffer to avoid cache misses */
+                    AppUtils_Printf("Reseting buffers...\n");
+                    for (j = 0; j < BUF_SIZE; ++j)
+                    {
+                        dst[j] = 0;
+                    }
                 }
             }
-            CSL_armR5CacheInvalidateAllIcache();
-
-            switch (test_mode)
+#if defined(BUILD_OCMC)
+            AppUtils_Printf("OCMC ");
+#elif defined(BUILD_MSMC)
+            AppUtils_Printf("MSMC ");
+#elif defined(BUILD_DDR)
+            AppUtils_Printf("DDR ");
+#endif
+#if defined(BUILD_MCU1_0)
+            AppUtils_Printf("MCU1_0 ");
+#elif defined(BUILD_MCU2_0)
+            AppUtils_Printf("MCU2_0 ");
+#endif
+            if (test_mode == COPY_MODE)
             {
-            case READ_MODE:
-                for (j = 0; j < mem_size; ++j)
-                    sum += buf[0][j];
-                break;
-            case WRITE_MODE:
-                for (j = 0; j < mem_size; ++j)
-                    buf[0][j] = 0xDEADBEEF;
-                break;
-            case COPY_MODE:
-                for (j = 0; j < mem_size; ++j)
-                    dst[j] = buf[0][j];
-                break;
-            default:
-                AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
-                return;
+                AppUtils_Printf("Copy\n\r");
             }
-            count++;
-        }
-
-        elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
-        durationInSecs = ((elapsedTime) / 1000U);
-        hrs = durationInSecs / (60U * 60U);
-        mins = (durationInSecs / 60U) - (hrs * 60U);
-        secs = durationInSecs - (hrs * 60U * 60U) - (mins * 60U);
-        usecs = elapsedTime - (((hrs * 60U * 60U) + (mins * 60U) + secs) * 1000000U);
-
-        AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
-        AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
-        AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
-        AppUtils_Printf("Iter            => %d\n", (unsigned int)ITERATION);
-
-        AppUtils_Printf("Bandwidth(Byte/s)  => %d\n", (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))));
-        bandwidth = (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0)));
-        bandwidths[i] = bandwidth;
-        times[i] = elapsedTime;
-
-        if (test_mode == WRITE_MODE)
-        {
-            AppUtils_Printf("Reseting buffers...\n");
-            for (j = 0; j < BUF_SIZE; ++j)
+            else if (test_mode == READ_MODE)
             {
-                buf[0][j] = j;
+                AppUtils_Printf("Read\n\r");
             }
-        }
-        else if (test_mode == COPY_MODE)
-        {
-            AppUtils_Printf("Reseting buffers...\n");
-            for (j = 0; j < BUF_SIZE; ++j)
+            else if (test_mode == WRITE_MODE)
             {
-                dst[j] = 0;
+                AppUtils_Printf("Write\n\r");
             }
+
+            if (cache_mode == ALL_INVALIDATE)
+            {
+                AppUtils_Printf("All Invalidate\n\r");
+            }
+            else if (cache_mode == ICACHE_INVALIDATE)
+            {
+                AppUtils_Printf("ICACHE Invalidate\n\r");
+            }
+            else if (cache_mode == DCACHE_INVALIDATE)
+            {
+                AppUtils_Printf("DCACHE Invalidate\n\r");
+            }
+            else if (cache_mode == NO_INVALIDATE)
+            {
+                AppUtils_Printf("No Invalidate\n\r");
+            }
+            AppUtils_Printf("\n*****All bandwidths and times*****\n");
+            AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
+            for (i = 0; i < NUM_TEST; i++)
+            {
+                AppUtils_Printf("%d\n", mem_size_arr[i] * 4);
+            }
+            AppUtils_Printf("bandwidths(Byte/s):\n");
+            for (i = 0; i < NUM_TEST; i++)
+            {
+                AppUtils_Printf("%d\n", bandwidths[i]);
+            }
+            AppUtils_Printf("times(us)):\n");
+            for (i = 0; i < NUM_TEST; i++)
+            {
+                AppUtils_Printf("%d\n", times[i]);
+            }
+            cache_mode++;
         }
-    }
-    AppUtils_Printf("\n*****All bandwidths and times*****\n");
-    AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
-    for (i = 0; i < NUM_TEST; i++)
-    {
-        AppUtils_Printf("%d\n", mem_size_arr[i]);
-    }
-    AppUtils_Printf("bandwidths(Byte/s):\n");
-    for (i = 0; i < NUM_TEST; i++)
-    {
-        AppUtils_Printf("%d\n", bandwidths[i]);
-    }
-    AppUtils_Printf("times(us)):\n");
-    for (i = 0; i < NUM_TEST; i++)
-    {
-        AppUtils_Printf("%d\n", times[i]);
+        test_mode++;
     }
     AppUtils_Printf("\nAll tests have passed\n");
-    // testTCM();
     OS_stop();
 }
-// uint32_t buf_tcm[2048] __attribute__((section(".buf_tcm")));
-
-// void testTCM()
-// {
-//     uint32_t start_time_dopen, elapsed_dopen;
-//     uint32_t start_time_dclose, elapsed_dclose;
-//     uint32_t currTime;
-//     int i, j;
-
-//     CSL_armR5Dsb();
-//     CSL_armR5CacheInvalidateAllDcache();
-//     CSL_armR5CacheEnableDCache(1U);
-//     /* measure with D-cache enabled */
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             buf_tcm[j] = 0x22222222;
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM write D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM write D-cache enabled end = %d µs\n", currTime);
-
-//     /* Make sure D-cache is disable */
-//     /* disable D-cache */
-//     CSL_armR5CacheEnableDCache(0U);
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             buf_tcm[j] = 0x11111111;
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM write D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM write D-cache disable end = %d µs\n", currTime);
-
-//     AppUtils_Printf(
-//         "TCM write 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
-//         elapsed_dopen, elapsed_dclose);
-//     //--------------------------------------------------------
-
-//     CSL_armR5Dsb();
-//     CSL_armR5CacheInvalidateAllDcache();
-//     CSL_armR5CacheEnableDCache(1U);
-//     /* measure with D-cache enabled */
-//     sum = 0;
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
-
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
-//     /* Make sure D-cache is disable */
-//     /* disable D-cache */
-//     sum = 0;
-//     CSL_armR5CacheEnableDCache(0U);
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
-
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
-
-//     AppUtils_Printf(
-//         "TCM read 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
-//         elapsed_dopen, elapsed_dclose);
-// }
 int do_main(void)
 {
 
