@@ -71,7 +71,7 @@ MEMORY
     MCU0_R5F_TCMB0_VECS (X)  : origin=0x41014000                     length=0x100
     MCU0_R5F_TCMB0 (RWIX)	 : origin=0x41014100	                 length=0x4000-0x100
 
-    BUF0                     : origin=DDR_START + (BUF_SIZE*0)                    length=BUF_SIZE
+    BUF                     : origin=DDR_START + (BUF_SIZE*0)                    length=BUF_SIZE
     BUF_CPY                  : origin=DDR_START + (BUF_SIZE*1)                   length=BUF_SIZE
     
     TEXT_ARR                 : origin=MAIN_OCMCRAM_START  length=TEXT_SIZE 
@@ -114,7 +114,7 @@ SECTIONS
     .data                                  : {} palign(128)    > OCMC_RAM
     .sysmem                                : {}                > OCMC_RAM
     .bss.devgroup                          : {*(.bss.devgroup*)} align(4)       > OCMC_RAM
-    .buf_0                                 : {} align(4)       > BUF0
+    .buf                                 : {} align(4)       > BUF
 
     .stack                                 : {} align(4)       > OCMC_RAM (HIGH)
 

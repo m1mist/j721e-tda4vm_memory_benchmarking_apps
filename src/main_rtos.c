@@ -179,11 +179,9 @@ uint32_t num_switches = 0;
 
 TaskP_Handle main_task[NUM_TASK];
 
-/* Array to hold the address of all the source buffers*/
-uint32_t *buf[NUM_TASK];
 uint32_t sum = 0;
-#if defined(BUILD_MCU1_0)
 
+#if defined(BUILD_MCU1_0)
 void memoryBenchmarking_setupSciServer(void *arg0, void *arg1)
 {
 
@@ -214,7 +212,7 @@ void memoryBenchmarking_setupSciServer(void *arg0, void *arg1)
  * or the same memory as the code like flash. The location can be changed
  * from the linker file
  */
-uint32_t buf_0[BUF_SIZE] __attribute__((section(".buf_0")));
+uint32_t buf[BUF_SIZE] __attribute__((section(".buf")));
 
 /* The target buffer for all the memcpy operations */
 uint32_t dst[BUF_SIZE] __attribute__((section(".buf_cpy")));
@@ -326,15 +324,15 @@ void MasterTask(void *a0, void *a1)
                     {
                     case READ_MODE:
                         for (j = 0; j < mem_size; ++j)
-                            sum += buf[0][j];
+                            sum += buf[j];
                         break;
                     case WRITE_MODE:
                         for (j = 0; j < mem_size; ++j)
-                            buf[0][j] = 0xDEADBEEF;
+                            buf[j] = 0xDEADBEEF;
                         break;
                     case COPY_MODE:
                         for (j = 0; j < mem_size; ++j)
-                            dst[j] = buf[0][j];
+                            dst[j] = buf[j];
                         break;
                     default:
                         AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
@@ -367,7 +365,7 @@ void MasterTask(void *a0, void *a1)
                     AppUtils_Printf("Reseting buffers...\n");
                     for (j = 0; j < BUF_SIZE; ++j)
                     {
-                        buf[0][j] = j;
+                        buf[j] = j;
                     }
                 }
                 else if (test_mode == COPY_MODE)
@@ -526,13 +524,11 @@ int do_main(void)
         }
     }
 
-    buf[0] = buf_0;
-
     /* Filling up the buffers with if they do not lie in the flash */
     AppUtils_Printf("Filling up the buffers\n");
     for (j = 0; j < BUF_SIZE; ++j)
     {
-        buf[0][j] = j;
+        buf[j] = j;
     }
 
     /* Creating a task parameter */
@@ -557,7 +553,8 @@ int do_main(void)
     AppUtils_Printf("Inst Cache Miss: %u\n", Val0);
     AppUtils_Printf("Inst Cache Access: %u\n", Val2);
     AppUtils_Printf("Data Cache Miss: %u\n", Val1);
-
+    AppUtils_Printf("Buf First Addr: %p\n", &buf[0]);
+    AppUtils_Printf("Buf Last Addr: %p\n", &buf[BUF_SIZE - 1]);
 #if !defined(BUILD_MCU1_0)
     /* Start the BIOS tasks*/
     OS_start();

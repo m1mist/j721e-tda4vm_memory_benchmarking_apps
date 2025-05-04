@@ -4,10 +4,10 @@
 #include <chrono>
 #include <iostream>
 #include <random>
-#define ARRAY_SIZE (1024 * 1024 * 4) // array_size * 4 = total size in bytes
+#define MB (1024 * 1024) // array_size * 4 = total size in bytes
+double mb = 0;
 
 int dummy;
-
 void useInt(int value)
 {
     dummy += value;
@@ -24,28 +24,24 @@ int sum = 0;
 
 void wr()
 {
-    auto *array = (int *)malloc(ARRAY_SIZE * sizeof(int));
-    // Initialize the array
-    for (size_t i = 0; i < ARRAY_SIZE; ++i)
+    auto *array = (int *)malloc(mb * MB * sizeof(int));
+    for (size_t i = 0; i < mb * MB; ++i)
     {
-        array[i] = i;
+        array[i] = 0;
     }
-
     // Perform a write operation with loop unrolling and macro usage
-    size_t num_elements = ARRAY_SIZE / 128;
+    size_t num_elements = mb * MB / 128;
     auto p = reinterpret_cast<char *>(array);
     auto start_time = std::chrono::high_resolution_clock::now();
-    // for (size_t j = 0; j < ITERATIONS; ++j) {
-    //         array[j] = j;
-    // }
     for (size_t j = 0; j < num_elements; ++j)
     {
-#define DOIT(i) p[i] = 0xABCDEF00;
+#define DOIT(i) p[i] = i;
         DOIT(0)
         DOIT(1)
         DOIT(2)
         DOIT(3)
-        DOIT(4) DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
+        DOIT(4)
+        DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
             DOIT(16) DOIT(17) DOIT(18) DOIT(19) DOIT(20) DOIT(21) DOIT(22) DOIT(23) DOIT(24) DOIT(25) DOIT(26) DOIT(27) DOIT(28) DOIT(29) DOIT(30) DOIT(31)
                 DOIT(32) DOIT(33) DOIT(34) DOIT(35) DOIT(36) DOIT(37) DOIT(38) DOIT(39) DOIT(40) DOIT(41) DOIT(42) DOIT(43) DOIT(44) DOIT(45) DOIT(46) DOIT(47)
                     DOIT(48) DOIT(49) DOIT(50) DOIT(51) DOIT(52) DOIT(53) DOIT(54) DOIT(55) DOIT(56) DOIT(57) DOIT(58) DOIT(59) DOIT(60) DOIT(61) DOIT(62) DOIT(63)
@@ -59,7 +55,7 @@ void wr()
 
     std::chrono::duration<double> elapsed_time = end_time - start_time;
 
-    double bandwidth_mb_per_sec = ((ARRAY_SIZE * sizeof(int)) / (elapsed_time.count() * 1e6));
+    double bandwidth_mb_per_sec = ((mb * MB * sizeof(int)) / (elapsed_time.count() * 1e6));
 
     printf("Write Bandwidth: %.2f MB/s\n", bandwidth_mb_per_sec);
     free(array);
@@ -68,16 +64,16 @@ void wr()
 
 void rd()
 {
-    auto *array = (int *)malloc(ARRAY_SIZE * sizeof(int));
+    auto *array = (int *)malloc(mb * MB * sizeof(int));
 
     // Initialize the array
-    for (size_t i = 0; i < ARRAY_SIZE; ++i)
+    for (size_t i = 0; i < mb * MB; ++i)
     {
         array[i] = i;
     }
 
     // Perform a write operation with loop unrolling and macro usage
-    size_t num_elements = ARRAY_SIZE / 128;
+    size_t num_elements = mb * MB / 128;
     auto p = reinterpret_cast<char *>(array);
     auto start_time = std::chrono::high_resolution_clock::now();
 
@@ -103,7 +99,7 @@ void rd()
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_time = end_time - start_time;
 
-    double bandwidth_mb_per_sec = ((ARRAY_SIZE * sizeof(int)) / (elapsed_time.count() * 1e6));
+    double bandwidth_mb_per_sec = ((mb * MB * sizeof(int)) / (elapsed_time.count() * 1e6));
     printf("Read Bandwidth: %.2f MB/s\n", bandwidth_mb_per_sec);
     free(array);
 }
@@ -112,8 +108,8 @@ void rd()
 void cp()
 {
     // Allocate source and destination arrays
-    int *array = (int *)malloc(ARRAY_SIZE * sizeof(int));
-    int *dst = (int *)malloc(ARRAY_SIZE * sizeof(int));
+    int *array = (int *)malloc(mb * MB * sizeof(int));
+    int *dst = (int *)malloc(mb * MB * sizeof(int));
 
     // Check if allocations succeeded
     if (!array || !dst)
@@ -124,14 +120,14 @@ void cp()
         return;
     }
     // Initialize the arrays
-    for (size_t i = 0; i < ARRAY_SIZE; ++i)
+    for (size_t i = 0; i < mb * MB; ++i)
     {
         array[i] = i;
         dst[i] = 0; // Initialize destination array to zero
     }
 
     // Perform a write operation with loop unrolling and macro usage
-    size_t num_elements = ARRAY_SIZE / 128;
+    size_t num_elements = mb * MB / 128;
     auto p = reinterpret_cast<char *>(array);
     auto d = reinterpret_cast<char *>(dst); // Keep original dst pointer
     auto start_time = std::chrono::high_resolution_clock::now();
@@ -142,7 +138,8 @@ void cp()
         DOIT(1)
         DOIT(2)
         DOIT(3)
-        DOIT(4) DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
+        DOIT(4)
+        DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
             DOIT(16) DOIT(17) DOIT(18) DOIT(19) DOIT(20) DOIT(21) DOIT(22) DOIT(23) DOIT(24) DOIT(25) DOIT(26) DOIT(27) DOIT(28) DOIT(29) DOIT(30) DOIT(31)
                 DOIT(32) DOIT(33) DOIT(34) DOIT(35) DOIT(36) DOIT(37) DOIT(38) DOIT(39) DOIT(40) DOIT(41) DOIT(42) DOIT(43) DOIT(44) DOIT(45) DOIT(46) DOIT(47)
                     DOIT(48) DOIT(49) DOIT(50) DOIT(51) DOIT(52) DOIT(53) DOIT(54) DOIT(55) DOIT(56) DOIT(57) DOIT(58) DOIT(59) DOIT(60) DOIT(61) DOIT(62) DOIT(63)
@@ -153,12 +150,9 @@ void cp()
         p += 128;
         d += 128;
     }
-    // for (size_t j = 0; j < ITERATIONS; ++j) {
-    //     dst[j] = array[j];
-    // }
     auto end_time = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed_time = end_time - start_time;
-    double bandwidth_mb_per_sec = ((ARRAY_SIZE * sizeof(int)) / (elapsed_time.count() * 1e6));
+    double bandwidth_mb_per_sec = ((mb * MB * sizeof(int)) / (elapsed_time.count() * 1e6));
     printf("Copy Bandwidth: %.2f MB/s\n", bandwidth_mb_per_sec);
 
     // Free allocated memory
@@ -224,9 +218,13 @@ void cp()
 
 int main()
 {
+    int tmp;
     std::cout << "Memory Bandwidth Benchmark" << std::endl;
     std::cout << "============================" << std::endl;
-    std::cout << "Total Size: " << ARRAY_SIZE * sizeof(int) / (1024 * 1024) << " MB" << std::endl;
+    std::cout << "Input size:(MB)";
+    std::cin >> tmp;
+    mb = (double)tmp / 4;
+    std::cout << "Total Size: " << mb * MB * sizeof(int) / (1024 * 1024) << " MB" << std::endl;
     wr();
     rd();
     cp();
