@@ -31,7 +31,7 @@ void wr()
     }
     // Perform a write operation with loop unrolling and macro usage
     size_t num_elements = mb * MB / 128;
-    auto p = reinterpret_cast<char *>(array);
+    auto p = array;
     auto start_time = std::chrono::high_resolution_clock::now();
     for (size_t j = 0; j < num_elements; ++j)
     {
@@ -41,7 +41,8 @@ void wr()
         DOIT(2)
         DOIT(3)
         DOIT(4)
-        DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
+        DOIT(5)
+        DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
             DOIT(16) DOIT(17) DOIT(18) DOIT(19) DOIT(20) DOIT(21) DOIT(22) DOIT(23) DOIT(24) DOIT(25) DOIT(26) DOIT(27) DOIT(28) DOIT(29) DOIT(30) DOIT(31)
                 DOIT(32) DOIT(33) DOIT(34) DOIT(35) DOIT(36) DOIT(37) DOIT(38) DOIT(39) DOIT(40) DOIT(41) DOIT(42) DOIT(43) DOIT(44) DOIT(45) DOIT(46) DOIT(47)
                     DOIT(48) DOIT(49) DOIT(50) DOIT(51) DOIT(52) DOIT(53) DOIT(54) DOIT(55) DOIT(56) DOIT(57) DOIT(58) DOIT(59) DOIT(60) DOIT(61) DOIT(62) DOIT(63)
@@ -64,7 +65,7 @@ void wr()
 
 void rd()
 {
-    auto *array = (int *)malloc(mb * MB * sizeof(int));
+    auto *array = (int *)malloc(mb * MB * sizeof(int)); // array元素总数为mb*MB
 
     // Initialize the array
     for (size_t i = 0; i < mb * MB; ++i)
@@ -74,7 +75,7 @@ void rd()
 
     // Perform a write operation with loop unrolling and macro usage
     size_t num_elements = mb * MB / 128;
-    auto p = reinterpret_cast<char *>(array);
+    auto p = array;
     auto start_time = std::chrono::high_resolution_clock::now();
 
     for (size_t j = 0; j < num_elements; ++j)
@@ -128,8 +129,8 @@ void cp()
 
     // Perform a write operation with loop unrolling and macro usage
     size_t num_elements = mb * MB / 128;
-    auto p = reinterpret_cast<char *>(array);
-    auto d = reinterpret_cast<char *>(dst); // Keep original dst pointer
+    auto p = array;
+    auto d = dst; // Keep original dst pointer
     auto start_time = std::chrono::high_resolution_clock::now();
     for (size_t j = 0; j < num_elements; ++j)
     {
@@ -139,7 +140,8 @@ void cp()
         DOIT(2)
         DOIT(3)
         DOIT(4)
-        DOIT(5) DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
+        DOIT(5)
+        DOIT(6) DOIT(7) DOIT(8) DOIT(9) DOIT(10) DOIT(11) DOIT(12) DOIT(13) DOIT(14) DOIT(15)
             DOIT(16) DOIT(17) DOIT(18) DOIT(19) DOIT(20) DOIT(21) DOIT(22) DOIT(23) DOIT(24) DOIT(25) DOIT(26) DOIT(27) DOIT(28) DOIT(29) DOIT(30) DOIT(31)
                 DOIT(32) DOIT(33) DOIT(34) DOIT(35) DOIT(36) DOIT(37) DOIT(38) DOIT(39) DOIT(40) DOIT(41) DOIT(42) DOIT(43) DOIT(44) DOIT(45) DOIT(46) DOIT(47)
                     DOIT(48) DOIT(49) DOIT(50) DOIT(51) DOIT(52) DOIT(53) DOIT(54) DOIT(55) DOIT(56) DOIT(57) DOIT(58) DOIT(59) DOIT(60) DOIT(61) DOIT(62) DOIT(63)
