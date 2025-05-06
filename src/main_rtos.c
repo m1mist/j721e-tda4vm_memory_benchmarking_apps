@@ -355,7 +355,7 @@ void MasterTask(void *a0, void *a1)
                             AppUtils_Printf("Invalid cache_mode! Master task do nothing. \r\n");
                             return;
                         }
-
+                        volatile int *dst_array = target_array + BUF_SIZE * sizeof(int);
                         switch (test_mode)
                         {
                         case READ_MODE:
@@ -367,7 +367,7 @@ void MasterTask(void *a0, void *a1)
                                 target_array[j] = 0xDEADBEEF;
                             break;
                         case COPY_MODE:
-                            volatile int *dst_array = target_array + BUF_SIZE*sizeof(int);
+
                             for (j = 0; j < mem_size; ++j)
                                 dst_array[j] = target_array[j];
                             break;
