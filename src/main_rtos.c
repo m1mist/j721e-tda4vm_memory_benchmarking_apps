@@ -109,7 +109,22 @@ void memoryBenchmarking_initSciclient();
 static uint8_t gAppTskStackMain[APP_TSK_STACK_MAIN];
 static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 #endif
-
+#define DDR_START 0x80000000
+#if defined(BUILD_MCU2_0)
+#define OCMC_START 0x03600000
+#define OCMC_END 0x0367FFFF
+#define MSMC_START 0x70080000
+#else
+#define OCMC_START 0x41C82000
+#define OCMC_END 0x41CFFFFF
+#define MSMC_START 0x70000000
+#endif
+// 在 DDR 上分配测试数组
+volatile int *ddr_test_array = (volatile int *)DDR_START;
+// 在 OCMC 上分配测试数组
+volatile int *ocmc_test_array = (volatile int *)OCMC_START;
+// 在 MSMC 上分配测试数组
+volatile int *msmc_test_array = (volatile int *)MSMC_START;
 /**
  * *********************************
  *             在此修改模式          *
@@ -136,6 +151,14 @@ uint32_t test_mode;
  *  3 - No Invalidate
  */
 uint16_t cache_mode;
+
+typedef enum
+{
+    MEM_TYPE_DDR,
+    MEM_TYPE_OCMC,
+    MEM_TYPE_MSMC,
+    MEM_TYPE_MAX
+} MemoryType;
 
 #define NUM_TASK 16
 
@@ -208,15 +231,6 @@ void memoryBenchmarking_setupSciServer(void *arg0, void *arg1)
 
 #endif
 
-/* Source buffers for all the memcpy operations. They can lie in the OCMC
- * or the same memory as the code like flash. The location can be changed
- * from the linker file
- */
-uint32_t buf[BUF_SIZE] __attribute__((section(".buf")));
-
-/* The target buffer for all the memcpy operations */
-uint32_t dst[BUF_SIZE] __attribute__((section(".buf_cpy")));
-
 static uint8_t MainApp_TaskStack[TASK_STACK_SIZE] __attribute__((aligned(32)));
 
 #ifdef BUILD_MCU2_0
@@ -249,195 +263,222 @@ void MasterTask(void *a0, void *a1)
     test_mode = READ_MODE;       // default test mode
     cache_mode = ALL_INVALIDATE; // default cache mode
     AppUtils_Printf("\n\rmaster_task -- start\n\r");
-    /* this loop is for the number of test modes to be performed */
-    while (test_mode != TEST_END)
+    // 遍历所有内存类型
+    for (int mem_type = 0; mem_type < MEM_TYPE_MAX; mem_type++)
     {
-        /* this loop is for the number of cache modes to be performed */
-        while (cache_mode != END)
+        volatile int *target_array;
+        switch (mem_type)
         {
-            int i, j;
-            uint32_t set = 0, way = 0;
-            unsigned int bandwidth = 0;
-            AppUtils_Printf("test started...\n");
-
-            uint32_t count = 0;
-            /* this loop is for the number of tests to be performed */
-            for (i = 0; i < NUM_TEST; ++i)
-            {
-                count = 0;                  // reset the count for each test
-                mem_size = mem_size_arr[i]; // get the size of the buffer for each test
-
-                /*invalidate all the cache to get fresh and reliable data*/
-                uint32_t numSets = CSL_armR5CacheGetNumSets();
-                uint32_t numWays = CSL_armR5CacheGetNumWays();
-                for (set = 0; set < numSets; set++)
-                {
-                    for (way = 0; way < numWays; way++)
-                    {
-                        CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-                    }
-                }
-                CSL_armR5CacheInvalidateAllIcache();
-                /* reset the PMU counters to get relevant data */
-                CSL_armR5PmuResetCntrs();
-
-                startTime = AppUtils_getCurTimeInUsec();
-                /* this loop is for the number of iterations to be performed */
-                while (count < ITERATION)
-                {
-                    switch (cache_mode)
-                    {
-                    case ALL_INVALIDATE:
-                        /*invalidate the cache to get fresh and reliable data*/
-                        numSets = CSL_armR5CacheGetNumSets();
-                        numWays = CSL_armR5CacheGetNumWays();
-                        for (set = 0; set < numSets; set++)
-                        {
-                            for (way = 0; way < numWays; way++)
-                            {
-                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-                            }
-                        }
-                    case ICACHE_INVALIDATE:
-                        CSL_armR5CacheInvalidateAllIcache();
-                        break;
-
-                    case DCACHE_INVALIDATE:
-                        numSets = CSL_armR5CacheGetNumSets();
-                        numWays = CSL_armR5CacheGetNumWays();
-                        for (set = 0; set < numSets; set++)
-                        {
-                            for (way = 0; way < numWays; way++)
-                            {
-                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-                            }
-                        }
-                        break;
-                    case NO_INVALIDATE:
-                        break;
-                    default:
-                        AppUtils_Printf("Invalid cache_mode! Master task do nothing. \r\n");
-                        return;
-                    }
-
-                    switch (test_mode)
-                    {
-                    case READ_MODE:
-                        for (j = 0; j < mem_size; ++j)
-                            sum += buf[j];
-                        break;
-                    case WRITE_MODE:
-                        for (j = 0; j < mem_size; ++j)
-                            buf[j] = 0xDEADBEEF;
-                        break;
-                    case COPY_MODE:
-                        for (j = 0; j < mem_size; ++j)
-                            dst[j] = buf[j];
-                        break;
-                    default:
-                        AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
-                        return;
-                    }
-                    count++;
-                }
-
-                elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
-                durationInSecs = ((elapsedTime) / 1000U);
-                hrs = durationInSecs / (60U * 60U);
-                mins = (durationInSecs / 60U) - (hrs * 60U);
-                secs = durationInSecs - (hrs * 60U * 60U) - (mins * 60U);
-                usecs = elapsedTime - (((hrs * 60U * 60U) + (mins * 60U) + secs) * 1000000U);
-
-                // AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
-                // AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
-                // AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
-                // AppUtils_Printf("Iter            => %d\n", (unsigned int)ITERATION);
-
-                // AppUtils_Printf("Bandwidth(Byte/s)  => %d\n", (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))));
-
-                bandwidth = (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))); // bandwidth in Byte/s
-                bandwidths[i] = bandwidth;                                                                         // store the bandwidth in the array
-                times[i] = elapsedTime;                                                                            // store the time in the array
-
-                if (test_mode == WRITE_MODE)
-                {
-                    /* Reset the buffer to avoid cache misses */
-                    AppUtils_Printf("Reseting buffers...\n");
-                    for (j = 0; j < BUF_SIZE; ++j)
-                    {
-                        buf[j] = j;
-                    }
-                }
-                else if (test_mode == COPY_MODE)
-                {
-                    /* Reset the buffer to avoid cache misses */
-                    AppUtils_Printf("Reseting buffers...\n");
-                    for (j = 0; j < BUF_SIZE; ++j)
-                    {
-                        dst[j] = 0;
-                    }
-                }
-            }
-#if defined(BUILD_OCMC)
-            AppUtils_Printf("OCMC ");
-#elif defined(BUILD_MSMC)
-            AppUtils_Printf("MSMC ");
-#elif defined(BUILD_DDR)
-            AppUtils_Printf("DDR ");
-#endif
-#if defined(BUILD_MCU1_0)
-            AppUtils_Printf("MCU1_0 ");
-#elif defined(BUILD_MCU2_0)
-            AppUtils_Printf("MCU2_0 ");
-#endif
-            if (test_mode == COPY_MODE)
-            {
-                AppUtils_Printf("Copy\n\r");
-            }
-            else if (test_mode == READ_MODE)
-            {
-                AppUtils_Printf("Read\n\r");
-            }
-            else if (test_mode == WRITE_MODE)
-            {
-                AppUtils_Printf("Write\n\r");
-            }
-
-            if (cache_mode == ALL_INVALIDATE)
-            {
-                AppUtils_Printf("All Invalidate\n\r");
-            }
-            else if (cache_mode == ICACHE_INVALIDATE)
-            {
-                AppUtils_Printf("ICACHE Invalidate\n\r");
-            }
-            else if (cache_mode == DCACHE_INVALIDATE)
-            {
-                AppUtils_Printf("DCACHE Invalidate\n\r");
-            }
-            else if (cache_mode == NO_INVALIDATE)
-            {
-                AppUtils_Printf("No Invalidate\n\r");
-            }
-            AppUtils_Printf("\n*****All bandwidths and times*****\n");
-            AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
-            for (i = 0; i < NUM_TEST; i++)
-            {
-                AppUtils_Printf("%d\n", mem_size_arr[i] * 4);
-            }
-            AppUtils_Printf("bandwidths(Byte/s):\n");
-            for (i = 0; i < NUM_TEST; i++)
-            {
-                AppUtils_Printf("%d\n", bandwidths[i]);
-            }
-            AppUtils_Printf("times(us)):\n");
-            for (i = 0; i < NUM_TEST; i++)
-            {
-                AppUtils_Printf("%d\n", times[i]);
-            }
-            cache_mode++;
+        case MEM_TYPE_DDR:
+            target_array = ddr_test_array;
+            AppUtils_Printf("Testing DDR memory\n");
+            break;
+        case MEM_TYPE_OCMC:
+            target_array = ocmc_test_array;
+            AppUtils_Printf("Testing OCMC memory\n");
+            break;
+        case MEM_TYPE_MSMC:
+            target_array = msmc_test_array;
+            AppUtils_Printf("Testing MSMC memory\n");
+            break;
+        default:
+            AppUtils_Printf("Invalid memory type!\n");
+            continue;
         }
-        test_mode++;
+        /* this loop is for the number of test modes to be performed */
+        while (test_mode != TEST_END)
+        {
+            /* this loop is for the number of cache modes to be performed */
+            while (cache_mode != END)
+            {
+                int i, j;
+                uint32_t set = 0, way = 0;
+                unsigned int bandwidth = 0;
+                AppUtils_Printf("test started...\n");
+
+                uint32_t count = 0;
+                /* this loop is for the number of tests to be performed */
+                for (i = 0; i < NUM_TEST; ++i)
+                {
+                    count = 0;                  // reset the count for each test
+                    mem_size = mem_size_arr[i]; // get the size of the buffer for each test
+
+                    /*invalidate all the cache to get fresh and reliable data*/
+                    uint32_t numSets = CSL_armR5CacheGetNumSets();
+                    uint32_t numWays = CSL_armR5CacheGetNumWays();
+                    for (set = 0; set < numSets; set++)
+                    {
+                        for (way = 0; way < numWays; way++)
+                        {
+                            CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                        }
+                    }
+                    CSL_armR5CacheInvalidateAllIcache();
+                    /* reset the PMU counters to get relevant data */
+                    CSL_armR5PmuResetCntrs();
+
+                    startTime = AppUtils_getCurTimeInUsec();
+                    /* this loop is for the number of iterations to be performed */
+                    while (count < ITERATION)
+                    {
+                        switch (cache_mode)
+                        {
+                        case ALL_INVALIDATE:
+                            /*invalidate the cache to get fresh and reliable data*/
+                            numSets = CSL_armR5CacheGetNumSets();
+                            numWays = CSL_armR5CacheGetNumWays();
+                            for (set = 0; set < numSets; set++)
+                            {
+                                for (way = 0; way < numWays; way++)
+                                {
+                                    CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                                }
+                            }
+                        case ICACHE_INVALIDATE:
+                            CSL_armR5CacheInvalidateAllIcache();
+                            break;
+
+                        case DCACHE_INVALIDATE:
+                            numSets = CSL_armR5CacheGetNumSets();
+                            numWays = CSL_armR5CacheGetNumWays();
+                            for (set = 0; set < numSets; set++)
+                            {
+                                for (way = 0; way < numWays; way++)
+                                {
+                                    CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
+                                }
+                            }
+                            break;
+                        case NO_INVALIDATE:
+                            break;
+                        default:
+                            AppUtils_Printf("Invalid cache_mode! Master task do nothing. \r\n");
+                            return;
+                        }
+
+                        switch (test_mode)
+                        {
+                        case READ_MODE:
+                            for (j = 0; j < mem_size; ++j)
+                                sum += target_array[j];
+                            break;
+                        case WRITE_MODE:
+                            for (j = 0; j < mem_size; ++j)
+                                target_array[j] = 0xDEADBEEF;
+                            break;
+                        case COPY_MODE:
+                            volatile int *dst_array = target_array + BUF_SIZE*sizeof(int);
+                            for (j = 0; j < mem_size; ++j)
+                                dst_array[j] = target_array[j];
+                            break;
+                        default:
+                            AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
+                            return;
+                        }
+                        count++;
+                    }
+
+                    elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
+                    durationInSecs = ((elapsedTime) / 1000U);
+                    hrs = durationInSecs / (60U * 60U);
+                    mins = (durationInSecs / 60U) - (hrs * 60U);
+                    secs = durationInSecs - (hrs * 60U * 60U) - (mins * 60U);
+                    usecs = elapsedTime - (((hrs * 60U * 60U) + (mins * 60U) + secs) * 1000000U);
+
+                    // AppUtils_Printf("\nMem Size    => %d\n", (unsigned int)mem_size);
+                    // AppUtils_Printf("Start Time in Usec => %d\n", (unsigned int)startTime);
+                    // AppUtils_Printf("Exec Time in Usec => %d\n", (unsigned int)elapsedTime);
+                    // AppUtils_Printf("Iter            => %d\n", (unsigned int)ITERATION);
+
+                    // AppUtils_Printf("Bandwidth(Byte/s)  => %d\n", (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))));
+
+                    bandwidth = (unsigned int)(1000000 * ((float)(mem_size * ITERATION * 4.0) / (elapsedTime * 1.0))); // bandwidth in Byte/s
+                    bandwidths[i] = bandwidth;                                                                         // store the bandwidth in the array
+                    times[i] = elapsedTime;                                                                            // store the time in the array
+
+                    if (test_mode == WRITE_MODE)
+                    {
+                        /* Reset the buffer to avoid cache misses */
+                        AppUtils_Printf("Reseting buffers...\n");
+                        for (j = 0; j < mem_size; ++j)
+                        {
+                            target_array[j] = j;
+                        }
+                    }
+                    else if (test_mode == COPY_MODE)
+                    {
+                        /* Reset the buffer to avoid cache misses */
+                        AppUtils_Printf("Reseting buffers...\n");
+                        for (j = 0; j < mem_size; ++j)
+                        {
+                            target_array[j] = 0;
+                        }
+                    }
+                }
+                if (mem_type == MEM_TYPE_DDR)
+                {
+                    AppUtils_Printf("DDR ");
+                }
+                else if (mem_type == MEM_TYPE_OCMC)
+                {
+                    AppUtils_Printf("OCMC ");
+                }
+                else if (mem_type == MEM_TYPE_MSMC)
+                {
+                    AppUtils_Printf("MSMC ");
+                }
+
+                if (test_mode == COPY_MODE)
+                {
+                    AppUtils_Printf("Copy\n\r");
+                }
+                else if (test_mode == READ_MODE)
+                {
+                    AppUtils_Printf("Read\n\r");
+                }
+                else if (test_mode == WRITE_MODE)
+                {
+                    AppUtils_Printf("Write\n\r");
+                }
+
+                if (cache_mode == ALL_INVALIDATE)
+                {
+                    AppUtils_Printf("All Invalidate\n\r");
+                }
+                else if (cache_mode == ICACHE_INVALIDATE)
+                {
+                    AppUtils_Printf("ICACHE Invalidate\n\r");
+                }
+                else if (cache_mode == DCACHE_INVALIDATE)
+                {
+                    AppUtils_Printf("DCACHE Invalidate\n\r");
+                }
+                else if (cache_mode == NO_INVALIDATE)
+                {
+                    AppUtils_Printf("No Invalidate\n\r");
+                }
+                AppUtils_Printf("\n*****All bandwidths and times*****\n");
+                AppUtils_Printf("Total Bytes:(x/4=array_size)\n");
+                for (i = 0; i < NUM_TEST; i++)
+                {
+                    AppUtils_Printf("%d\n", mem_size_arr[i] * 4);
+                }
+                AppUtils_Printf("bandwidths(Byte/s):\n");
+                for (i = 0; i < NUM_TEST; i++)
+                {
+                    AppUtils_Printf("%d\n", bandwidths[i]);
+                }
+                AppUtils_Printf("times(us)):\n");
+                for (i = 0; i < NUM_TEST; i++)
+                {
+                    AppUtils_Printf("%d\n", times[i]);
+                }
+                cache_mode++;
+            }
+            cache_mode = ALL_INVALIDATE; // 重置 cache_mode
+            test_mode++;
+        }
+        test_mode = READ_MODE; // 重置 test_mode
     }
     AppUtils_Printf("\nAll tests have passed\n");
     OS_stop();
@@ -528,7 +569,9 @@ int do_main(void)
     AppUtils_Printf("Filling up the buffers\n");
     for (j = 0; j < BUF_SIZE; ++j)
     {
-        buf[j] = j;
+        msmc_test_array[j] = j;
+        ocmc_test_array[j] = j;
+        ddr_test_array[j] = j;
     }
 
     /* Creating a task parameter */
@@ -553,8 +596,7 @@ int do_main(void)
     AppUtils_Printf("Inst Cache Miss: %u\n", Val0);
     AppUtils_Printf("Inst Cache Access: %u\n", Val2);
     AppUtils_Printf("Data Cache Miss: %u\n", Val1);
-    AppUtils_Printf("Buf First Addr: %p\n", &buf[0]);
-    AppUtils_Printf("Buf Last Addr: %p\n", &buf[BUF_SIZE - 1]);
+
 #if !defined(BUILD_MCU1_0)
     /* Start the BIOS tasks*/
     OS_start();
