@@ -103,18 +103,19 @@ SECTIONS
 
 
     .text                                  : {} palign(8)      > TEXT_ARR
-    .const.devgroup                        : {*(.const.devgroup*)} align(4)     > OCMC_RAM
-    .const                                 : {} palign(8)      > OCMC_RAM
-    .rodata                                : {} palign(8)      > OCMC_RAM
-    .cinit                                 : {} palign(8)      > OCMC_RAM
-    .pinit                                 : {} palign(8)      > OCMC_RAM
-    .boardcfg_data                         : {} align(4)       > OCMC_RAM
-    .bss                                   : {} align(4)       > OCMC_RAM
+    .const.devgroup                        : {*(.const.devgroup*)} align(4)     > MSMC
+    .const                                 : {} palign(8)      > MSMC
+    .rodata                                : {} palign(8)      > MSMC
+    .cinit                                 : {} palign(8)      > MSMC
+    .pinit                                 : {} palign(8)      > MSMC
+    .boardcfg_data                         : {} align(4)       > MSMC
+    .bss                                   : {} align(4)       > MSMC
+    .data                                  : {} palign(128)    > MSMC
+    .sysmem                                : {}                > MSMC
+    .bss.devgroup                          : {*(.bss.devgroup*)} align(4)       > MSMC
+    
+    .buf                                 : {} align(4)         > BUF
     .buf_cpy                               : {} align(4)       > BUF_CPY
-    .data                                  : {} palign(128)    > OCMC_RAM
-    .sysmem                                : {}                > OCMC_RAM
-    .bss.devgroup                          : {*(.bss.devgroup*)} align(4)       > OCMC_RAM
-    .buf                                 : {} align(4)       > BUF
 
     .stack                                 : {} align(4)       > OCMC_RAM (HIGH)
 
