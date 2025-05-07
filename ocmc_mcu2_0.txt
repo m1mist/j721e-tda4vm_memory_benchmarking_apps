@@ -1,0 +1,821 @@
+Calculating Benchmarks for OCMC memory on MCU2_0 (single core)                  
+                                                                                
+Board_init success                                                              
+Countdown...                                                                    
+1/5                                                                             
+2/5                                                                             
+3/5                                                                             
+4/5                                                                             
+5/5                                                                             
+Filling up the buffers                                                          
+Inst Cache Miss: 1                                                              
+Inst Cache Access: 26                                                           
+Data Cache Miss: 39                                                             
+Buf First Addr: 56623104                                                        
+Buf Last Addr: 56754172                                                         
+                                                                                
+master_task -- start                                                            
+test started...                                                                 
+OCMC MCU2_0 Read                                                                
+All Invalidate                                                                  
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+2904865                                                                         
+5739704                                                                         
+11204481                                                                        
+26113069                                                                        
+37087402                                                                        
+46948356                                                                        
+55828494                                                                        
+63965884                                                                        
+79349089                                                                        
+118347298                                                                       
+156882271                                                                       
+187841439                                                                       
+208394810                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6885                                                                            
+6969                                                                            
+7140                                                                            
+7659                                                                            
+8089                                                                            
+8520                                                                            
+8956                                                                            
+9380                                                                            
+10324                                                                           
+13844                                                                           
+20887                                                                           
+34889                                                                           
+62896                                                                           
+6796                                                                            
+6795                                                                            
+6795                                                                            
+test started...                                                                 
+OCMC MCU2_0 Read                                                                
+ICACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+141843971                                                                       
+240963855                                                                       
+368663594                                                                       
+534759358                                                                       
+602409638                                                                       
+632911392                                                                       
+657894736                                                                       
+679501698                                                                       
+697191489                                                                       
+707426597                                                                       
+291634033                                                                       
+256050009                                                                       
+243945654                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+141                                                                             
+166                                                                             
+217                                                                             
+374                                                                             
+498                                                                             
+632                                                                             
+760                                                                             
+883                                                                             
+1175                                                                            
+2316                                                                            
+11236                                                                           
+25595                                                                           
+53730                                                                           
+114                                                                             
+114                                                                             
+114                                                                             
+test started...                                                                 
+OCMC MCU2_0 Read                                                                
+DCACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+2996254                                                                         
+5918910                                                                         
+11554015                                                                        
+26870885                                                                        
+38119440                                                                        
+48210196                                                                        
+57260650                                                                        
+65509335                                                                        
+81165163                                                                        
+120444019                                                                       
+158521600                                                                       
+189213535                                                                       
+209500671                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6675                                                                            
+6758                                                                            
+6924                                                                            
+7443                                                                            
+7870                                                                            
+8297                                                                            
+8732                                                                            
+9159                                                                            
+10093                                                                           
+13603                                                                           
+20671                                                                           
+34636                                                                           
+62564                                                                           
+6582                                                                            
+6580                                                                            
+6579                                                                            
+test started...                                                                 
+OCMC MCU2_0 Read                                                                
+No Invalidate                                                                   
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+625000000                                                                       
+689655172                                                                       
+733944954                                                                       
+763358778                                                                       
+767263427                                                                       
+772200772                                                                       
+766871165                                                                       
+769230769                                                                       
+772830188                                                                       
+739350180                                                                       
+293541162                                                                       
+259373886                                                                       
+244747357                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+32                                                                              
+58                                                                              
+109                                                                             
+262                                                                             
+391                                                                             
+518                                                                             
+652                                                                             
+780                                                                             
+1060                                                                            
+2216                                                                            
+11163                                                                           
+25267                                                                           
+53554                                                                           
+6                                                                               
+6                                                                               
+6                                                                               
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Write                                                               
+All Invalidate                                                                  
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+2928686                                                                         
+5814798                                                                         
+11472823                                                                        
+27563395                                                                        
+40048057                                                                        
+51712992                                                                        
+62695924                                                                        
+73108322                                                                        
+93848092                                                                        
+154493163                                                                       
+241669739                                                                       
+339318628                                                                       
+424882492                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6829                                                                            
+6879                                                                            
+6973                                                                            
+7256                                                                            
+7491                                                                            
+7735                                                                            
+7975                                                                            
+8207                                                                            
+8729                                                                            
+10605                                                                           
+13559                                                                           
+19314                                                                           
+30849                                                                           
+6794                                                                            
+6794                                                                            
+6794                                                                            
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Write                                                               
+ICACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+149253731                                                                       
+259740259                                                                       
+410256410                                                                       
+632911392                                                                       
+721153846                                                                       
+773694390                                                                       
+809061488                                                                       
+832177531                                                                       
+869639065                                                                       
+915818893                                                                       
+642635810                                                                       
+597138952                                                                       
+581689078                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+134                                                                             
+154                                                                             
+195                                                                             
+316                                                                             
+416                                                                             
+517                                                                             
+618                                                                             
+721                                                                             
+942                                                                             
+1789                                                                            
+5099                                                                            
+10975                                                                           
+22533                                                                           
+113                                                                             
+114                                                                             
+114                                                                             
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Write                                                               
+DCACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+3014318                                                                         
+5988023                                                                         
+11813349                                                                        
+28332625                                                                        
+41140976                                                                        
+53120849                                                                        
+64316953                                                                        
+74943792                                                                        
+96138950                                                                        
+157493030                                                                       
+244902840                                                                       
+342618151                                                                       
+427934310                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6635                                                                            
+6680                                                                            
+6772                                                                            
+7059                                                                            
+7292                                                                            
+7530                                                                            
+7774                                                                            
+8006                                                                            
+8521                                                                            
+10403                                                                           
+13380                                                                           
+19128                                                                           
+30629                                                                           
+6579                                                                            
+6579                                                                            
+6579                                                                            
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Write                                                               
+No Invalidate                                                                   
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+740740740                                                                       
+869565217                                                                       
+919540229                                                                       
+961538461                                                                       
+974025974                                                                       
+977995110                                                                       
+980392156                                                                       
+981996726                                                                       
+982254196                                                                       
+974078478                                                                       
+658653266                                                                       
+605973185                                                                       
+586242061                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+27                                                                              
+46                                                                              
+87                                                                              
+208                                                                             
+308                                                                             
+409                                                                             
+510                                                                             
+611                                                                             
+834                                                                             
+1682                                                                            
+4975                                                                            
+10815                                                                           
+22358                                                                           
+7                                                                               
+7                                                                               
+7                                                                               
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Copy                                                                
+All Invalidate                                                                  
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+2893099                                                                         
+5724098                                                                         
+11213905                                                                        
+26343519                                                                        
+37561036                                                                        
+47904191                                                                        
+57168991                                                                        
+65782260                                                                        
+82257254                                                                        
+120924053                                                                       
+158498597                                                                       
+188864553                                                                       
+208916304                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6913                                                                            
+6988                                                                            
+7134                                                                            
+7592                                                                            
+7987                                                                            
+8350                                                                            
+8746                                                                            
+9121                                                                            
+9959                                                                            
+13549                                                                           
+20674                                                                           
+34700                                                                           
+62739                                                                           
+6795                                                                            
+6795                                                                            
+6795                                                                            
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Copy                                                                
+ICACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+111111111                                                                       
+223463687                                                                       
+423280423                                                                       
+813008130                                                                       
+952380952                                                                       
+1173020527                                                                      
+1138952164                                                                      
+1290322580                                                                      
+1354049586                                                                      
+287489033                                                                       
+255880056                                                                       
+244227472                                                                       
+238373404                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+180                                                                             
+179                                                                             
+189                                                                             
+246                                                                             
+315                                                                             
+341                                                                             
+439                                                                             
+465                                                                             
+605                                                                             
+5699                                                                            
+12806                                                                           
+26834                                                                           
+54986                                                                           
+103                                                                             
+104                                                                             
+104                                                                             
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Copy                                                                
+DCACHE Invalidate                                                               
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+2999400                                                                         
+5932957                                                                         
+11612715                                                                        
+27214587                                                                        
+38824899                                                                        
+49370525                                                                        
+58885879                                                                        
+67651369                                                                        
+84444902                                                                        
+122846217                                                                       
+160203383                                                                       
+190284834                                                                       
+210017625                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+6668                                                                            
+6742                                                                            
+6889                                                                            
+7349                                                                            
+7727                                                                            
+8102                                                                            
+8491                                                                            
+8869                                                                            
+9701                                                                            
+13337                                                                           
+20454                                                                           
+34441                                                                           
+62410                                                                           
+6582                                                                            
+6581                                                                            
+6581                                                                            
+test started...                                                                 
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+Reseting buffers...                                                             
+OCMC MCU2_0 Copy                                                                
+No Invalidate                                                                   
+                                                                                
+*****All bandwidths and times*****                                              
+Total Bytes:(x/4=array_size)                                                    
+200                                                                             
+400                                                                             
+800                                                                             
+2000                                                                            
+3000                                                                            
+4000                                                                            
+5000                                                                            
+6000                                                                            
+8192                                                                            
+16384                                                                           
+32768                                                                           
+65536                                                                           
+131072                                                                          
+0                                                                               
+0                                                                               
+0                                                                               
+bandwidths(Byte/s):                                                             
+1000000000                                                                      
+1379310344                                                                      
+1666666666                                                                      
+1886792452                                                                      
+1935483870                                                                      
+2000000000                                                                      
+1879699248                                                                      
+1829268292                                                                      
+1728270042                                                                      
+295366864                                                                       
+258483868                                                                       
+244866238                                                                       
+237906124                                                                       
+0                                                                               
+0                                                                               
+0                                                                               
+times(us)):                                                                     
+20                                                                              
+29                                                                              
+48                                                                              
+106                                                                             
+155                                                                             
+200                                                                             
+266                                                                             
+328                                                                             
+474                                                                             
+5547                                                                            
+12677                                                                           
+26764                                                                           
+55094                                                                           
+7                                                                               
+6                                                                               
+6                                                                               
+                                                                                
+All tests have passed                                                           
+
+

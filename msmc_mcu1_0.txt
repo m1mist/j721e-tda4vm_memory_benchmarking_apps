@@ -1,0 +1,820 @@
+Calculating Benchmarks for MSMC memory on MCU1_0 (single core) 
+
+Board_init success
+Countdown...
+1/5
+2/5
+3/5
+4/5
+5/5
+Filling up the buffers
+Inmaster_task -- stInst Cache Access: 29
+Data Cache Miss: 39
+Buf First Addr: 1879048192
+Buf Last Addr: 1879179260
+Buf Last Addr: 1879179260
+test started...
+MSMC MCU1_0 Read
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2916302
+5707762
+10957403
+24342745
+33459736
+41164968
+47682624
+53390282
+63602484
+85928567
+104346718
+116911659
+124419300
+0
+0
+0
+times(us)):
+6858
+7008
+7301
+8216
+8966
+9717
+10486
+11238
+12880
+19067
+31403
+56056
+105347
+6701
+6701
+6700
+test started...
+MSMC MCU1_0 Read
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+200000000
+314960629
+446927374
+593471810
+638297872
+668896321
+682128240
+693641618
+711111111
+676465730
+174344240
+147606928
+139340463
+0
+0
+0
+times(us)):
+100
+127
+179
+337
+470
+598
+733
+865
+1152
+2422
+18795
+44399
+94066
+74
+74
+74
+test started...
+MSMC MCU1_0 Read
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2968239
+5810575
+11148272
+24721878
+33948172
+41723166
+48281189
+54029716
+64271143
+86605349
+104850889
+117323976
+124752060
+0
+0
+0
+times(us)):
+6738
+6884
+7176
+8090
+8837
+9587
+10356
+11105
+12746
+18918
+31252
+55859
+105066
+6572
+6573
+6572
+test started...
+MSMC MCU1_0 Read
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+645161290
+677966101
+727272727
+746268656
+750000000
+754716981
+751879699
+753768844
+755719557
+700170940
+175005340
+148422602
+140052143
+0
+0
+0
+times(us)):
+31
+59
+110
+268
+400
+530
+665
+796
+1084
+2340
+18724
+44155
+93588
+4
+5
+5
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Write
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2952901
+5818181
+11309018
+25960539
+36500790
+45771827
+53984020
+61349693
+75114615
+109548007
+159594778
+208753264
+246505679
+0
+0
+0
+times(us)):
+6773
+6875
+7074
+7704
+8219
+8739
+9262
+9780
+10906
+14956
+20532
+31394
+53172
+6694
+6694
+6694
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Write
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+212765957
+336134453
+473372781
+623052959
+666666666
+693240901
+710227272
+722021660
+738683498
+757466481
+368967458
+329525341
+313149847
+0
+0
+0
+times(us)):
+94
+119
+169
+321
+450
+577
+704
+831
+1109
+2163
+8881
+19888
+41856
+68
+68
+68
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Write
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2989536
+5891883
+11448196
+26295030
+36936715
+46307015
+54513737
+62021914
+75830787
+110374562
+160533019
+209567664
+247245015
+0
+0
+0
+times(us)):
+6690
+6789
+6988
+7606
+8122
+8638
+9172
+9674
+10803
+14844
+20412
+31272
+53013
+6573
+6573
+6573
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Write
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+800000000
+888888888
+919540229
+956937799
+961538461
+966183574
+965250965
+967741935
+970616113
+966607669
+378908418
+333618407
+314555184
+0
+0
+0
+times(us)):
+25
+45
+87
+209
+312
+414
+518
+620
+844
+1695
+8648
+19644
+41669
+5
+5
+5
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Copy
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2911208
+5702066
+10978454
+24560972
+33917467
+41911148
+48742444
+54714572
+65515035
+88476077
+107478352
+120648011
+128510780
+0
+0
+0
+times(us)):
+6870
+7015
+7287
+8143
+8845
+9544
+10258
+10966
+12504
+18518
+30488
+54320
+101993
+6705
+6705
+6706
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Copy
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+178571428
+341880341
+579710144
+1010101010
+1176470588
+1333333333
+1302083333
+1312910284
+1308626198
+175718575
+152444754
+144368322
+140605020
+0
+0
+0
+times(us)):
+112
+117
+138
+198
+255
+300
+384
+457
+626
+9324
+21495
+45395
+93220
+73
+74
+73
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Copy
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+2970444
+5824111
+11206051
+25018764
+34506556
+42593972
+49455984
+55488763
+66310506
+89135520
+108052496
+121058075
+128821488
+0
+0
+0
+times(us)):
+6733
+6868
+7139
+7994
+8694
+9391
+10110
+10813
+12354
+18381
+30326
+54136
+101747
+6573
+6573
+6573
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+MSMC MCU1_0 Copy
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+0
+0
+0
+bandwidths(Byte/s):
+1052631578
+1481481481
+1632653061
+1818181818
+1851851851
+1895734597
+1587301587
+1694915254
+1534082397
+179806848
+153595200
+144830939
+140872499
+0
+0
+0
+times(us)):
+19
+27
+49
+110
+162
+211
+315
+354
+534
+9112
+21334
+45250
+93043
+5
+5
+5
+
+All tests have passed
+
+ 
+

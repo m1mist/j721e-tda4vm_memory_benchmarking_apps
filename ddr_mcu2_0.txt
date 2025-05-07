@@ -1,0 +1,998 @@
+Calculating Benchmarks for DDR memory on MCU2_0 (single core) 
+
+Board_init success
+Countdown...
+1/5
+2/5
+3/5
+4/5
+5/5
+Filling up the buffers
+Inst Cache Miss: 1
+Inst Cache Access: 26
+Data Cache Miss: 39
+Buf First Addr: -2013265920
+Buf Last Addr: -1996488708
+
+master_task -- start
+test started...
+DDR MCU2_0 Read
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23788
+47567
+95094
+237412
+355723
+473774
+591535
+709073
+965759
+1914184
+3760497
+7264407
+13601985
+24123717
+39340847
+57472437
+74687054
+87846204
+96337045
+101229429
+times(us)):
+840725
+840905
+841265
+842416
+843351
+844283
+845258
+846175
+848244
+855926
+871374
+902152
+963624
+1086665
+1332681
+1824485
+2807919
+4774599
+8707562
+16573457
+test started...
+DDR MCU2_0 Read
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+140845070
+238095238
+361990950
+520833333
+583657587
+611620795
+636132315
+652173913
+676465730
+656410256
+137900850
+118390057
+110998949
+108172882
+107134201
+106759738
+106670844
+106659370
+106659302
+106651410
+times(us)):
+142
+168
+221
+384
+514
+654
+786
+920
+1211
+2496
+23762
+55356
+118084
+242338
+489375
+982183
+1966003
+3932429
+7864863
+15730890
+test started...
+DDR MCU2_0 Read
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23804
+47598
+95155
+237567
+355954
+474083
+591928
+709536
+966408
+1915352
+3762548
+7268387
+13608185
+24134578
+39355849
+57487845
+74698999
+87855643
+96342157
+101232850
+times(us)):
+840177
+840358
+840729
+841865
+842804
+843734
+844696
+845623
+847675
+855404
+870899
+901658
+963185
+1086176
+1332173
+1823996
+2807470
+4774086
+8707100
+16572897
+test started...
+DDR MCU2_0 Read
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+588235294
+666666666
+701754385
+729927007
+731707317
+742115027
+736377025
+739827373
+742701722
+679834024
+138835691
+118542100
+111448200
+108412219
+107241141
+106851992
+106696677
+106691384
+106670735
+106653620
+times(us)):
+34
+60
+114
+274
+410
+539
+679
+811
+1103
+2410
+23602
+55285
+117608
+241803
+488887
+981335
+1965527
+3931249
+7864020
+15730564
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Write
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23792
+47578
+95128
+237617
+356159
+474551
+592744
+710801
+968952
+1926953
+3821470
+7517725
+14558524
+27381452
+48923846
+80651254
+119365864
+157076682
+186549609
+205873826
+times(us)):
+840607
+840722
+840964
+841688
+842320
+842901
+843534
+844117
+845449
+850254
+857471
+871753
+900311
+957378
+1071641
+1300136
+1756911
+2670227
+4496717
+8149271
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Write
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+149253731
+258064516
+408163265
+625000000
+709219858
+759013282
+793650793
+817438692
+849792531
+890918977
+298569476
+256080025
+239830198
+233276084
+230986262
+229961467
+229626328
+229611243
+229618031
+229651757
+times(us)):
+134
+155
+196
+320
+423
+527
+630
+734
+964
+1839
+10975
+25592
+54652
+112375
+226978
+455979
+913289
+1826698
+3653288
+7305503
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Write
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23806
+47606
+95185
+237758
+356383
+474835
+593102
+711229
+969545
+1928162
+3823441
+7521703
+14563765
+27393183
+48941155
+80679365
+119392570
+157099922
+186573840
+205889389
+times(us)):
+840111
+840225
+840464
+841189
+841790
+842397
+843025
+843609
+844932
+849721
+857029
+871292
+899987
+956968
+1071262
+1299683
+1756518
+2669832
+4496133
+8148655
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Write
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+714285714
+833333333
+898876404
+934579439
+946372239
+952380952
+956022944
+956937799
+957009345
+953667054
+296301654
+256390595
+240384403
+234157496
+231271559
+230091152
+229628340
+229641415
+229649902
+229665589
+times(us)):
+28
+48
+89
+214
+317
+420
+523
+627
+856
+1718
+11059
+25561
+54526
+111952
+226698
+455722
+913281
+1826458
+3652781
+7305063
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Copy
+All Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23788
+47566
+95094
+237436
+355777
+473892
+591733
+709317
+966198
+1907169
+3724745
+7124353
+13102954
+22589643
+35407926
+49443127
+61668117
+70360132
+75697987
+78684898
+times(us)):
+840739
+840924
+841269
+842332
+843223
+844073
+844975
+845884
+847859
+859074
+879738
+919887
+1000324
+1160461
+1480708
+2120772
+3400707
+5961194
+11081679
+21322028
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Copy
+ICACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+109289617
+219780219
+410256410
+763358778
+882352941
+1072386058
+980392156
+1086956521
+1092266666
+104790534
+90299823
+85603072
+82353902
+81978665
+81864229
+81878421
+81896454
+81905298
+81908633
+81909413
+times(us)):
+183
+182
+195
+262
+340
+373
+510
+552
+750
+15635
+36288
+76558
+159157
+319771
+640436
+1280650
+2560736
+5120919
+10241421
+20482647
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Copy
+DCACHE Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+23805
+47600
+95160
+237599
+356036
+474219
+592130
+709803
+966846
+1908273
+3726689
+7127491
+13110097
+22601562
+35421083
+49455556
+61675952
+70366341
+75702708
+78683982
+times(us)):
+840158
+840336
+840686
+841751
+842610
+843491
+844409
+845304
+847291
+858577
+879279
+919482
+999779
+1159849
+1480158
+2120239
+3400275
+5960668
+11080988
+21322276
+test started...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+Reseting buffers...
+DDR MCU2_0 Copy
+No Invalidate
+
+*****All bandwidths and times*****
+Total Bytes:(x/4=array_size)
+200
+400
+800
+2000
+3000
+4000
+5000
+6000
+8192
+16384
+32768
+65536
+131072
+262144
+524288
+1048576
+2097152
+4194304
+8388608
+16777216
+bandwidths(Byte/s):
+909090909
+1290322580
+1481481481
+1639344262
+1675977653
+1724137931
+1404494382
+1431980906
+1317041800
+104743638
+89861511
+84687152
+82968514
+82219587
+81936387
+81913408
+81907521
+81911728
+81911208
+81911564
+times(us)):
+22
+31
+54
+122
+179
+232
+356
+419
+622
+15642
+36465
+77386
+157978
+318834
+639872
+1280103
+2560390
+5120517
+10241099
+20482109
+
+All tests have passed
+
+ 
+
