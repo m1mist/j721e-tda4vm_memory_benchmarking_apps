@@ -246,12 +246,13 @@ uint32_t startTime, elapsedTime;
 /* Master task which will call the slave tasks randomly and */
 void MasterTask(void *a0, void *a1)
 {
-    test_mode = READ_MODE;       // default test mode
-    cache_mode = ALL_INVALIDATE; // default cache mode
+    test_mode = READ_MODE; // default test mode
+
     AppUtils_Printf("\n\rmaster_task -- start\n\r");
     /* this loop is for the number of test modes to be performed */
     while (test_mode != TEST_END)
     {
+        cache_mode = ALL_INVALIDATE; // default cache mode
         /* this loop is for the number of cache modes to be performed */
         while (cache_mode != END)
         {
@@ -550,11 +551,11 @@ int do_main(void)
     uint32_t Val1 = CSL_armR5PmuReadCntr(1);
 
     /* Sanity checking for PMU counters*/
-    AppUtils_Printf("Inst Cache Miss: %u\n", Val0);
-    AppUtils_Printf("Inst Cache Access: %u\n", Val2);
-    AppUtils_Printf("Data Cache Miss: %u\n", Val1);
-    AppUtils_Printf("Buf First Addr: %p\n", &buf[0]);
-    AppUtils_Printf("Buf Last Addr: %p\n", &buf[BUF_SIZE - 1]);
+    AppUtils_Printf("Inst Cache Miss: %d\n", Val0);
+    AppUtils_Printf("Inst Cache Access: %d\n", Val2);
+    AppUtils_Printf("Data Cache Miss: %d\n", Val1);
+    AppUtils_Printf("Buf First Addr: %d\n", &buf[0]);
+    AppUtils_Printf("Buf Last Addr: %d\n", &buf[BUF_SIZE - 1]);
 #if !defined(BUILD_MCU1_0)
     /* Start the BIOS tasks*/
     OS_start();
