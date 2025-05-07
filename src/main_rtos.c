@@ -290,29 +290,15 @@ void MasterTask(void *a0, void *a1)
                     {
                     case ALL_INVALIDATE:
                         /*invalidate the cache to get fresh and reliable data*/
-                        numSets = CSL_armR5CacheGetNumSets();
-                        numWays = CSL_armR5CacheGetNumWays();
-                        for (set = 0; set < numSets; set++)
-                        {
-                            for (way = 0; way < numWays; way++)
-                            {
-                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-                            }
-                        }
+                        CSL_armR5CacheWbInv(buf, sizeof(buf), true);
+                        CSL_armR5CacheInvalidateAllIcache();
+                        break;
                     case ICACHE_INVALIDATE:
                         CSL_armR5CacheInvalidateAllIcache();
                         break;
 
                     case DCACHE_INVALIDATE:
-                        numSets = CSL_armR5CacheGetNumSets();
-                        numWays = CSL_armR5CacheGetNumWays();
-                        for (set = 0; set < numSets; set++)
-                        {
-                            for (way = 0; way < numWays; way++)
-                            {
-                                CSL_armR5CacheCleanInvalidateDcacheSetWay(set, way);
-                            }
-                        }
+                        CSL_armR5CacheWbInv(buf, sizeof(buf), true);
                         break;
                     case NO_INVALIDATE:
                         break;
@@ -325,15 +311,21 @@ void MasterTask(void *a0, void *a1)
                     {
                     case READ_MODE:
                         for (j = 0; j < mem_size; ++j)
+                        {
                             sum += buf[j];
+                        }
                         break;
                     case WRITE_MODE:
                         for (j = 0; j < mem_size; ++j)
+                        {
                             buf[j] = 0xDEADBEEF;
+                        }
                         break;
                     case COPY_MODE:
                         for (j = 0; j < mem_size; ++j)
+                        {
                             dst[j] = buf[j];
+                        }
                         break;
                     default:
                         AppUtils_Printf("Invalid mem_type! Slave task do nothing. \r\n");
@@ -431,7 +423,7 @@ void MasterTask(void *a0, void *a1)
             {
                 AppUtils_Printf("%d\n", bandwidths[i]);
             }
-            AppUtils_Printf("times(us)):\n");
+            AppUtils_Printf("times(us):\n");
             for (i = 0; i < NUM_TEST; i++)
             {
                 AppUtils_Printf("%d\n", times[i]);
