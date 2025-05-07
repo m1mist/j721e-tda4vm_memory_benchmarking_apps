@@ -238,11 +238,11 @@ uint32_t get_rand()
 
 uint32_t hrs, mins, secs, durationInSecs, usecs;
 uint32_t startTime, elapsedTime;
-void testTCM();
 /* Master task which will call the slave tasks randomly and */
 void MasterTask(void *a0, void *a1)
 {
     AppUtils_Printf("\n\rmaster_task\n\r");
+
     if (test_mode == COPY_MODE)
     {
         AppUtils_Printf("Copy Mode\n\r");
@@ -376,162 +376,10 @@ void MasterTask(void *a0, void *a1)
         AppUtils_Printf("%d\n", times[i]);
     }
     AppUtils_Printf("\nAll tests have passed\n");
-    // testTCM();
+
     OS_stop();
 }
-// uint32_t buf_tcm[2048] __attribute__((section(".buf_tcm")));
 
-// void testTCM()
-// {
-//     uint32_t start_time_dopen, elapsed_dopen;
-//     uint32_t start_time_dclose, elapsed_dclose;
-//     uint32_t currTime;
-//     int i, j;
-
-//     CSL_armR5Dsb();
-//     CSL_armR5CacheInvalidateAllDcache();
-//     CSL_armR5CacheEnableDCache(1U);
-//     /* measure with D-cache enabled */
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             buf_tcm[j] = 0x22222222;
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM write D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM write D-cache enabled end = %d µs\n", currTime);
-
-//     /* Make sure D-cache is disable */
-//     /* disable D-cache */
-//     CSL_armR5CacheEnableDCache(0U);
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             buf_tcm[j] = 0x11111111;
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM write D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM write D-cache disable end = %d µs\n", currTime);
-
-//     AppUtils_Printf(
-//         "TCM write 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
-//         elapsed_dopen, elapsed_dclose);
-//     //--------------------------------------------------------
-
-//     CSL_armR5Dsb();
-//     CSL_armR5CacheInvalidateAllDcache();
-//     CSL_armR5CacheEnableDCache(1U);
-//     /* measure with D-cache enabled */
-//     sum = 0;
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
-
-//     start_time_dopen = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dopen)
-//     {
-//         elapsed_dopen = (0xFFFFFFFFU - start_time_dopen) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dopen = currTime - start_time_dopen;
-//     }
-//     AppUtils_Printf("TCM read D-cache enabled Start = %d µs\n", start_time_dopen);
-//     AppUtils_Printf("TCM read D-cache enabled end = %d µs\n", currTime);
-//     /* Make sure D-cache is disable */
-//     /* disable D-cache */
-//     sum = 0;
-//     CSL_armR5CacheEnableDCache(0U);
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
-
-//     start_time_dclose = AppUtils_getCurTimeInUsec();
-//     for (i = 0; i < 500; i++)
-//     {
-//         for (j = 0; j < 2048; j++)
-//         {
-//             sum += buf_tcm[j];
-//         }
-//     }
-//     currTime = AppUtils_getCurTimeInUsec();
-//     if (currTime < start_time_dclose)
-//     {
-//         elapsed_dclose = (0xFFFFFFFFU - start_time_dclose) + currTime + 1U;
-//     }
-//     else
-//     {
-//         elapsed_dclose = currTime - start_time_dclose;
-//     }
-//     AppUtils_Printf("TCM read D-cache disable Start = %d µs\n", start_time_dclose);
-//     AppUtils_Printf("TCM read D-cache disable end = %d µs\n", currTime);
-
-//     AppUtils_Printf(
-//         "TCM read 500 × 2048: D-cache ON = %d µs, OFF = %d µs\n",
-//         elapsed_dopen, elapsed_dclose);
-// }
 int do_main(void)
 {
 

@@ -3,7 +3,7 @@
 /* Description:                                                               */
 /*    Link command file for J7200 MCU1_0 view                                 */
 /*                                                                            */
-/* (c) Texas Instruments 2021, All rights reserved.                           */
+/* (c) Texas Instruments 2021-2023, All rights reserved.                           */
 /*----------------------------------------------------------------------------*/
 /*  History:                                                                  */
 /*    Aug 26th, 2016 Original version .......................... Loc Truong   */
@@ -54,8 +54,8 @@ __SVC_STACK_SIZE   = 0x0100;
 --define TEXT_SIZE=0xA0000
 --define BUF_SIZE=0x2000
 
---define MAIN_OCMCRAM_START=0xD0000000
---define MAIN_OCMCRAM_END=0xD0080000
+--define MAIN_OCMCRAM_START=0x03600000
+--define MAIN_OCMCRAM_END=0x0367FFFF
 --define MSMC_START=0x70100000
 --define XIP_MCU1_0_START=0x501c0100
 --define DDR_START=0x88000000
@@ -70,7 +70,6 @@ MEMORY
 
     MCU0_R5F_TCMB0_VECS (X)  : origin=0x41010000                     length=0x100
     MCU0_R5F_TCMB0 (RWIX)	 : origin=0x41010100	                 length=0x8000-0x100
-    RESERVED (X)             : origin=0x41C3E000                     length=0x2000
     BUF0                     : origin=MAIN_OCMCRAM_START + (BUF_SIZE*0)                    length=BUF_SIZE
     BUF1                     : origin=MAIN_OCMCRAM_START + (BUF_SIZE*1)                    length=BUF_SIZE
     BUF2                     : origin=MAIN_OCMCRAM_START + (BUF_SIZE*2)                    length=BUF_SIZE
@@ -108,7 +107,7 @@ MEMORY
     TSK15                    : origin=MSMC_START + (TASK_SIZE*15)  length=TASK_SIZE
     TEXT_ARR                 : origin=MSMC_START + (TASK_SIZE*16)  length=TEXT_SIZE
 
-    MSMC (X)                 : origin=(MSMC_START + ((TASK_SIZE*16) + TEXT_SIZE))    length=0x80000
+    MSMC (X)                 : origin=(MSMC_START + ((TASK_SIZE*16) + TEXT_SIZE))         length=0x80000
 
 
 }
@@ -126,8 +125,6 @@ SECTIONS
         r5_mpu_freertos.oer5f (.const:gCslR5MpuCfg)
         *rtsv7R4_A_le_v3D16_eabi.lib*<*> (.text)
     }                                > MSMC
-
-    .ratConf            : {} palign(8) > MSMC
 
     GROUP {
             .text.hwi       : palign(8)
@@ -205,4 +202,8 @@ SECTIONS
     RUN_START(__SVC_STACK_START)
     RUN_END(__SVC_STACK_END)
 
+    /* zxl */
+    .buf_ddr 					: {} align(4)       > DDR_START
+    .buf_tcm 					: {} align(4)       > MCU0_R5F_TCMB0
+    .buf_msmc 					: {} align(4)       > MSMC
 }
