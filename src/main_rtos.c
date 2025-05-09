@@ -48,7 +48,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <math.h>
 /* BOARD Header files */
 #include <ti/board/board.h>
 
@@ -186,9 +186,9 @@ int default_test_sizes[37] = {2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256
                               3072, 4096, 5120, 6144, 8192, 10240, 12288, 16384, 24567, 32768, 65536, 98304,
                               131072, 262144, 393216, 524288, 1048576};
 
-extern void preplatencyarr(uint32_t *arr, uint32_t len) __attribute__((fastcall));
-extern uint32_t latencytest(uint32_t iterations, uint32_t *arr) __attribute((fastcall));
-floating_t RunTest(uint32_t size_kb, uint32_t iterations, bool useAsm);
+extern void preplatencyarr(uint32_t *arr, uint32_t len);
+extern uint32_t latencytest(uint32_t iterations, uint32_t *arr);
+floating_t RunTest(uint32_t size_kb, uint32_t iterations, int useAsm);
 
 /* *********************************
  *                                 *
@@ -259,7 +259,10 @@ void _system_post_cinit(void)
 }
 #endif
 #endif
-
+uint32_t scale_iterations(uint32_t size_kb, uint32_t iterations)
+{
+    return 10 * iterations / pow(size_kb, 1.0 / 4.0);
+}
 uint32_t hrs, mins, secs, durationInSecs, usecs;
 uint32_t startTime, elapsedTime;
 floating_t RunTest(uint32_t size_kb, uint32_t iterations, int useAsm)
@@ -525,7 +528,7 @@ void MasterTask(void *a0, void *a1)
             if (result == 0)
             {
                 AppUtils_Printf("Stopping at %d KB.\n", default_test_sizes[i]);
-                return 2;
+                return;
             }
             AppUtils_Printf("%d,%.5g\n", default_test_sizes[i], result);
         }
