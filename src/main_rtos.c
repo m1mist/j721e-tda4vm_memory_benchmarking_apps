@@ -112,7 +112,7 @@ static uint8_t gSciserverInitTskStack[APP_SCISERVER_INIT_TSK_STACK];
 
 /**
  * *********************************
- *             在此修改模式          *
+ *            bandwidth            *
  * *********************************
  */
 #define READ_MODE 0
@@ -172,10 +172,29 @@ uint32_t times[NUM_TEST];
 /* Variable to pick up value from the mem_size_arr for each test*/
 uint32_t mem_size = 0;
 
-/* Counter for the number of sysbios task switches that occur during the
- * execution of the code
+/**
+ * *********************************
+ *             latency             *
+ * *********************************
  */
-uint32_t num_switches = 0;
+#define POINTER_SIZE 4
+#define POINTER_INT uint32_t
+int32_t ITERATIONS = 50000000;
+typedef float floating_t;
+
+int default_test_sizes[37] = {2, 4, 8, 12, 16, 24, 32, 48, 64, 96, 128, 192, 256, 384, 512, 600, 768, 1024, 1536, 2048,
+                              3072, 4096, 5120, 6144, 8192, 10240, 12288, 16384, 24567, 32768, 65536, 98304,
+                              131072, 262144, 393216, 524288, 1048576};
+
+extern void preplatencyarr(uint32_t *arr, uint32_t len) __attribute__((fastcall));
+extern uint32_t latencytest(uint32_t iterations, uint32_t *arr) __attribute((fastcall));
+floating_t RunTest(uint32_t size_kb, uint32_t iterations, bool useAsm);
+
+/* *********************************
+ *                                 *
+ * *********************************
+ */
+
 
 TaskP_Handle main_task[NUM_TASK];
 
@@ -243,6 +262,68 @@ void _system_post_cinit(void)
 
 uint32_t hrs, mins, secs, durationInSecs, usecs;
 uint32_t startTime, elapsedTime;
+floating_t RunTest(uint32_t size_kb, uint32_t iterations, int useAsm)
+{
+    uint32_t list_size = size_kb * 1024 / POINTER_SIZE; // using 32-bit pointers
+    uint32_t sum = 0;
+
+    // Fill list to create random access pattern
+    POINTER_INT *A = (POINTER_INT *)malloc(POINTER_SIZE * list_size);
+
+    if (!A)
+    {
+        fprintf(stderr, "Failed to allocate memory for %u KB test.\n", size_kb);
+        return 0;
+    }
+
+    for (uint32_t i = 0; i < list_size; i++)
+    {
+        A[i] = i;
+    }
+
+    int iter = list_size;
+    while (iter > 1)
+    {
+        iter -= 1;
+        int j = iter - 1 == 0 ? 0 : rand() % (iter - 1);
+        POINTER_INT tmp = A[iter];
+        A[iter] = A[j];
+        A[j] = tmp;
+    }
+
+    if (useAsm)
+    {
+        preplatencyarr(A, list_size);
+    }
+
+    uint32_t scaled_iterations = scale_iterations(size_kb, iterations);
+
+    // Run test
+    startTime = AppUtils_getCurTimeInUsec();
+    if (useAsm)
+    {
+        sum = latencytest(scaled_iterations, A);
+    }
+    else
+    {
+        uint32_t current = A[0];
+        for (uint32_t i = 0; i < scaled_iterations; i++)
+        {
+            current = A[current];
+            sum += current;
+        }
+    }
+    elapsedTime = AppUtils_getElapsedTimeInUsec(startTime);
+
+    floating_t latency = 1e3 * (floating_t)elapsedTime / (floating_t)scaled_iterations;
+    free(A);
+
+    if (sum == 0)
+        AppUtils_Printf("sum == 0 (?)\n");
+    return latency;
+}
+
+
 /* Master task which will call the slave tasks randomly and */
 void MasterTask(void *a0, void *a1)
 {
@@ -431,6 +512,28 @@ void MasterTask(void *a0, void *a1)
             cache_mode++;
         }
         test_mode++;
+    }
+    int maxTestSizeMB = 0;
+    int useAsm = 1;
+    AppUtils_Printf("\nLatency test started...\n");
+    AppUtils_Printf("Region,Latency (ns)\n");
+    for (long unsigned int i = 0; i < sizeof(default_test_sizes) / sizeof(int); i++)
+    {
+        if (maxTestSizeMB == 0 || default_test_sizes[i] <= maxTestSizeMB * 1024)
+        {
+            floating_t result = RunTest(default_test_sizes[i], ITERATIONS, useAsm);
+            if (result == 0)
+            {
+                AppUtils_Printf("Stopping at %d KB.\n", default_test_sizes[i]);
+                return 2;
+            }
+            AppUtils_Printf("%d,%.5g\n", default_test_sizes[i], result);
+        }
+        else
+        {
+            AppUtils_Printf("Stopping at %d KB.\n", maxTestSizeMB * 1024);
+            break;
+        }
     }
     AppUtils_Printf("\nAll tests have passed\n");
     OS_stop();
