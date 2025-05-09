@@ -25,7 +25,7 @@ COMP_LIST_COMMON = $(PDK_COMMON_FREERTOS_COMP)
 INCLUDE_EXTERNAL_INTERFACES += freertos
 SRCS_COMMON += main_rtos.c
 SRCS_COMMON += r5_mpu_freertos.c
-
+SRCS_ASM_COMMON += lat.asm
 EXTERNAL_LNKCMD_FILE_LOCAL = $(pdk_PATH)/ti/csl/example/ospi/memory_benchmarking_apps/linker_files/$(MEM)/$(SOC)/linker_$(CORE)_$(MEM).lds
 
 CFLAGS_LOCAL_COMMON += -DUART_ENABLED
